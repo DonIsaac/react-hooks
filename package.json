@@ -5,7 +5,9 @@
   "license": "MIT",
   "scripts": {
     "test": "jest",
-    "clean": "rimraf .cache"
+    "build": "tsc",
+    "lint": "eslint src",
+    "clean": "rimraf .cache dist"
   },
   "devDependencies": {
     "@testing-library/react-hooks": "^7.0.2",
@@ -13,6 +15,10 @@
     "@types/jsdom": "^16.2.13",
     "@types/react": "^17.0.34",
     "@types/react-test-renderer": "^17.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.3.0",
+    "@typescript-eslint/parser": "^5.3.0",
+    "eslint": "^8.2.0",
+    "eslint-plugin-react": "^7.26.1",
     "jest": "^27.3.1",
     "jest-fetch-mock": "^3.0.3",
     "jsdom": "^18.0.1",

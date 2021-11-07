@@ -1,6 +1,6 @@
-import { renderHook, act, RenderHookResult } from '@testing-library/react-hooks'
+import { renderHook, RenderHookResult } from '@testing-library/react-hooks'
 import { SynchronousPromise } from 'synchronous-promise'
-import { enableFetchMocks, FetchMock, MockResponseInit } from 'jest-fetch-mock'
+import { MockResponseInit } from 'jest-fetch-mock'
 import useFetch, { FetchState } from './useFetch'
 
 
@@ -40,7 +40,7 @@ describe('When fetch resolves with a json body', () => {
     describe('when the result tries to perform prototype pollution', () => {
         beforeEach(async () => {
             fetchMock.doMock()
-            fetchMock.mockResponse(res => Promise.resolve({
+            fetchMock.mockResponse(() => Promise.resolve({
                 body: JSON.stringify({
                     a: 1,
                     '__proto__': {
@@ -76,7 +76,7 @@ describe('When fetch resolves with a json body', () => {
             const { data } = result.result.current
             expect(data.__proto__).toEqual({})
             expect(data.foo).toBeUndefined()
-            // @ts-expect-error
+            // @ts-expect-error foo should not be defined
             expect(Object.prototype.foo).toBeUndefined()
         })
 
@@ -92,7 +92,7 @@ describe('When fetch resolves with text', () => {
 
     beforeEach(async () => {
         fetchMock.doMock()
-        fetchMock.mockResponse(req => Promise.resolve({
+        fetchMock.mockResponse(() => Promise.resolve({
             body: 'Hello, world!',
             init: {
                 status: 200,
@@ -135,7 +135,7 @@ describe('When fetch returns an image', () => {
 
 
     it('data should be a blob', () => {
-        console.log(actual.data)
+        // console.log(actual.data)
         expect(actual.data).toBeInstanceOf(Blob)
     })
 
@@ -165,7 +165,7 @@ describe('When the response is pending', () => {
         }).pause()
 
         fetchMock.doMock()
-        fetchMock.mockResponse(req => promise)
+        fetchMock.mockResponse(() => promise)
 
         result = renderHook(() => useFetch('https://example.com'))
         // await result.waitForNextUpdate()

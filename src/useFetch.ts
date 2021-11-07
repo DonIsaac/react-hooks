@@ -65,7 +65,7 @@ export default function useFetch<T = any>(
 
     useEffect(() => {
         const sendRequest = async () => {
-            if (url === "") {
+            if (url === '') {
                 return
             }
             try {
@@ -74,7 +74,7 @@ export default function useFetch<T = any>(
                 // If the request fails, set the error object. Response may contain
                 // error details - include them if available
                 if (!res.ok) {
-                    let errPayload: Record<string, unknown> = await parseBody(res)
+                    const errPayload: Record<string, unknown> = await parseBody(res)
 
                     const err = new Error(`${res.status}: ${res.statusText}`)
                     Object.assign(err, errPayload)
