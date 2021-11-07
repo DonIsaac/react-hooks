@@ -215,12 +215,15 @@ describe('When fetch rejects', () => {
 
     beforeEach(async () => {
         fetchMock.doMock()
-        // error = makeError()
         fetchMock.mockReject(makeError)
 
         result = renderHook(() => useFetch('https://example.com'))
         await result.waitForNextUpdate()
     })
+
+    afterEach(() => {
+        fetchMock.resetMocks()
+    }) 
 
     it('should set error to the thrown error', async () => {
         expect(result.result.current.error).toBe(error)
@@ -233,4 +236,39 @@ describe('When fetch rejects', () => {
     it('should set data to null', () => {
         expect(result.result.current.data).toBeNull()
     })
+})
+
+describe('when fetch rejects and the error attempts to perform prototype pollution', () => {
+    let result: RenderHookResult<unknown, FetchState<any>>
+    const error: Error = new Error('Something went wrong')
+    const makeError = () => Promise.reject(error)
+
+    beforeEach(async () => {
+        fetchMock.doMock()
+        fetchMock.mockReject(makeError)
+
+        // @ts-expect-error attempting prototype pollution
+        error['__proto__'] = { foo: 'bar' }
+        result = renderHook(() => useFetch('https://example.com'))
+        await result.waitForNextUpdate()
+    })
+
+    afterEach(() => {
+        fetchMock.resetMocks()
+    }) 
+
+    it('should set error to the thrown error', async () => {
+        expect(result.result.current.error).toBe(error)
+    })
+
+    it('should not pollute the prototype', () => {
+        // @ts-expect-error foo should not be defined
+        expect(result.result.current.error.foo).toBeUndefined()
+    })
+
+    it('should set status to "error"', () => {
+        expect(result.result.current.status).toBe('error')
+    })
+
+
 })
