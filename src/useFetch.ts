@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 
-
 /**
  * Status of an asynchronously executing task.
  */
@@ -57,7 +56,7 @@ export type FetchState<T> = {
  */
 export default function useFetch<T = any>(
     url: string,
-    opts?: RequestInit,
+    opts?: RequestInit
 ): FetchState<T> {
     const [data, setData] = useState<T | null>(null)
     const [error, setError] = useState<Error | null>(null)
@@ -74,7 +73,9 @@ export default function useFetch<T = any>(
                 // If the request fails, set the error object. Response may contain
                 // error details - include them if available
                 if (!res.ok) {
-                    const errPayload: Record<string, unknown> = await parseBody(res)
+                    const errPayload: Record<string, unknown> = await parseBody(
+                        res
+                    )
 
                     const err = new Error(`${res.status}: ${res.statusText}`)
                     Object.assign(err, errPayload)
@@ -83,15 +84,19 @@ export default function useFetch<T = any>(
 
                     // Request succeeds, parse the response and set the data object
                 } else {
-                    try {
-                        const payload = await parseBody<T>(res)
-                        setData(payload)
-                        setStatus('success')
-                    } catch (e) {
-                        const err = e instanceof Error ? e : new Error(e as string)
-                        setError(err)
-                        setStatus('error')
-                    }
+                    const payload = await parseBody<T>(res)
+                    setData(payload)
+                    setStatus('success')
+                    // try {
+                    //     const payload = await parseBody<T>(res)
+                    //     setData(payload)
+                    //     setStatus('success')
+                    // } catch (e) {
+                    //     const err =
+                    //         e instanceof Error ? e : new Error(e as string)
+                    //     setError(err)
+                    //     setStatus('error')
+                    // }
                 }
             } catch (err) {
                 setError(err instanceof Error ? err : new Error(err as string))

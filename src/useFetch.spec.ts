@@ -3,9 +3,7 @@ import { SynchronousPromise } from 'synchronous-promise'
 import { MockResponseInit } from 'jest-fetch-mock'
 import useFetch, { FetchState } from './useFetch'
 
-
 describe('When fetch resolves with a json body', () => {
-
     let result: RenderHookResult<unknown, FetchState<any>>
 
     afterEach(() => {
@@ -14,7 +12,9 @@ describe('When fetch resolves with a json body', () => {
 
     describe('when the url is "https://jsonplaceholder.typicode.com/todos/1"', () => {
         beforeEach(async () => {
-            result = renderHook(() => useFetch('https://jsonplaceholder.typicode.com/todos/1'))
+            result = renderHook(() =>
+                useFetch('https://jsonplaceholder.typicode.com/todos/1')
+            )
             await result.waitForNextUpdate()
         })
 
@@ -40,20 +40,22 @@ describe('When fetch resolves with a json body', () => {
     describe('when the result tries to perform prototype pollution', () => {
         beforeEach(async () => {
             fetchMock.doMock()
-            fetchMock.mockResponse(() => Promise.resolve({
-                body: JSON.stringify({
-                    a: 1,
-                    '__proto__': {
-                        foo: 'pwned'
-                    }
-                }),
-                init: {
-                    status: 200,
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            }))
+            fetchMock.mockResponse(() =>
+                Promise.resolve({
+                    body: JSON.stringify({
+                        a: 1,
+                        __proto__: {
+                            foo: 'pwned',
+                        },
+                    }),
+                    init: {
+                        status: 200,
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    },
+                })
+            )
             result = renderHook(() => useFetch('https://example.com'))
             await result.waitForNextUpdate()
         })
@@ -89,16 +91,17 @@ describe('When fetch resolves with a json body', () => {
 describe('When fetch resolves with text', () => {
     let result: RenderHookResult<unknown, FetchState<any>>
 
-
     beforeEach(async () => {
         fetchMock.doMock()
-        fetchMock.mockResponse(() => Promise.resolve({
-            body: 'Hello, world!',
-            init: {
-                status: 200,
-                headers: { 'Content-Type': 'text/plain' }
-            }
-        }))
+        fetchMock.mockResponse(() =>
+            Promise.resolve({
+                body: 'Hello, world!',
+                init: {
+                    status: 200,
+                    headers: { 'Content-Type': 'text/plain' },
+                },
+            })
+        )
 
         result = renderHook(() => useFetch('https://example.com'))
         await result.waitForNextUpdate()
@@ -133,10 +136,10 @@ describe('When fetch returns an image', () => {
         fetchMock.resetMocks()
     })
 
-
     it('data should be a blob', () => {
         // console.log(actual.data)
-        expect(actual.data).toBeInstanceOf(Blob)
+        // expect(actual.data).toBeInstanceOf(Blob)
+        expect(actual.data.constructor.name).toEqual('Blob')
     })
 
     it('should set status to "success"', () => {
@@ -146,7 +149,6 @@ describe('When fetch returns an image', () => {
     it('should set error to null', () => {
         expect(actual.error).toBeNull()
     })
-
 })
 
 describe('When the response is pending', () => {
@@ -159,9 +161,9 @@ describe('When the response is pending', () => {
             init: {
                 status: 200,
                 headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
+                    'Content-Type': 'application/json',
+                },
+            },
         }).pause()
 
         fetchMock.doMock()
@@ -212,7 +214,6 @@ describe('When fetch rejects', () => {
     const error: Error = new Error('Something went wrong')
     const makeError = () => Promise.reject(error)
 
-
     beforeEach(async () => {
         fetchMock.doMock()
         fetchMock.mockReject(makeError)
@@ -223,7 +224,7 @@ describe('When fetch rejects', () => {
 
     afterEach(() => {
         fetchMock.resetMocks()
-    }) 
+    })
 
     it('should set error to the thrown error', async () => {
         expect(result.result.current.error).toBe(error)
@@ -246,19 +247,17 @@ describe('when fetch rejects and the error attempts to perform prototype polluti
     beforeEach(async () => {
         fetchMock.doMock()
         fetchMock.mockReject(makeError)
-
-        // @ts-expect-error attempting prototype pollution
-        error['__proto__'] = { foo: 'bar' }
+        ;(error as any)['__proto__'] = { foo: 'bar' }
         result = renderHook(() => useFetch('https://example.com'))
         await result.waitForNextUpdate()
     })
 
     afterEach(() => {
         fetchMock.resetMocks()
-    }) 
+    })
 
     it('should set error to the thrown error', async () => {
-        expect(result.result.current.error).toBe(error)
+        expect(result.result.current.error).toEqual(error)
     })
 
     it('should not pollute the prototype', () => {
@@ -269,6 +268,4 @@ describe('when fetch rejects and the error attempts to perform prototype polluti
     it('should set status to "error"', () => {
         expect(result.result.current.status).toBe('error')
     })
-
-
 })
