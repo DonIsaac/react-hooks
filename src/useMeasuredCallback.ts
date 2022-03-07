@@ -2,7 +2,8 @@ import { useCallback, DependencyList } from 'react'
 
 export default function useMeasuredCallback<T extends (...args: any[]) => any>(
     callback: T,
-    deps: DependencyList
+    deps: DependencyList,
+    onMeasure?: (measure: PerformanceMeasure) => void
 ) {
     const measuredCallback: T = useCallback(
         function measuredCallback(...args) {
@@ -15,17 +16,27 @@ export default function useMeasuredCallback<T extends (...args: any[]) => any>(
             if (res instanceof Promise) {
                 return res.then(resolved => {
                     performance.mark(endName)
-                    performance.measure(callback.name, startName, endName)
+                    const measure = performance.measure(
+                        callback.name,
+                        startName,
+                        endName
+                    )
+                    onMeasure?.(measure)
 
                     return resolved
                 })
             } else {
                 performance.mark(endName)
-                performance.measure(callback.name, startName, endName)
+                const measure = performance.measure(
+                    callback.name,
+                    startName,
+                    endName
+                )
+                onMeasure?.(measure)
                 return res
             }
         } as T,
-        deps
+        [...deps, onMeasure]
     )
 
     return measuredCallback
