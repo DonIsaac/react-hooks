@@ -1,33 +1,5 @@
 import { useState, useEffect } from 'react'
-
-/**
- * Status of an asynchronously executing task.
- */
-export type FetchStatus = 'pending' | 'success' | 'error'
-
-/**
- * Returned from `useFetch`.
- *
- * @template T the type of data the asynchronous task resolves to.
- */
-export type FetchState<T> = {
-    /**
-     * The current status of the fetch request.
-     */
-    status: FetchStatus
-
-    /**
-     * The data payload parsed from the response. While pending, or if the
-     * response returns unsuccessfully, this is `null`.
-     */
-    data: T | null
-
-    /**
-     * The response error on unsuccessful requests. If the request was successful
-     * or is currently pending, this is `null`.
-     */
-    error: Error | null
-}
+import { RequestState, RequestStatus } from './types'
 
 /**
  * Sends a fetch request to a URL.
@@ -51,22 +23,23 @@ export type FetchState<T> = {
  * @returns An object containing the request status, response data (on success),
  * and response error (on error).
  *
- * @see {@link FetchState}
+ * @see {@link RequestState}
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API MDN Fetch API}
  */
-export default function useFetch<T = any>(
+export default function useFetch<T = any, E = Error>(
     url: string,
     opts?: RequestInit
-): FetchState<T> {
+): RequestState<T, E> {
     const [data, setData] = useState<T | null>(null)
-    const [error, setError] = useState<Error | null>(null)
-    const [status, setStatus] = useState<FetchStatus>('pending')
+    const [error, setError] = useState<E | null>(null)
+    const [status, setStatus] = useState<RequestStatus>('pending')
 
     useEffect(() => {
         const sendRequest = async () => {
             if (url === '') {
                 return
             }
+
             try {
                 const res = await fetch(url, opts)
 
@@ -76,30 +49,17 @@ export default function useFetch<T = any>(
                     const errPayload: Record<string, unknown> = await parseBody(
                         res
                     )
-
                     const err = new Error(`${res.status}: ${res.statusText}`)
                     Object.assign(err, errPayload)
-                    setError(err)
-                    setStatus('error')
-
-                    // Request succeeds, parse the response and set the data object
+                    throw err
                 } else {
+                    // Request succeeds, parse the response and set the data object
                     const payload = await parseBody<T>(res)
                     setData(payload)
                     setStatus('success')
-                    // try {
-                    //     const payload = await parseBody<T>(res)
-                    //     setData(payload)
-                    //     setStatus('success')
-                    // } catch (e) {
-                    //     const err =
-                    //         e instanceof Error ? e : new Error(e as string)
-                    //     setError(err)
-                    //     setStatus('error')
-                    // }
                 }
             } catch (err) {
-                setError(err instanceof Error ? err : new Error(err as string))
+                setError(err as E)
                 setStatus('error')
             }
         }
@@ -107,10 +67,10 @@ export default function useFetch<T = any>(
         sendRequest()
         // TODO add opts back.
     }, [url])
-    return { status, data, error }
+    return { status, data, error } as RequestState<T, E>
 }
 
-async function parseBody<T = any>(res: Response): Promise<T> {
+async function parseBody<T>(res: Response): Promise<T> {
     try {
         const contentType = res.headers.get('Content-Type') ?? ''
         if (!contentType.length || contentType.includes('application/json')) {
