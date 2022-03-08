@@ -5,3 +5,5 @@ fetch.dontMock()
 // require('jest-fetch-mock').enableMocks()
 
 // fetchMock.dontMock()
+
+jest.setTimeout(1000)

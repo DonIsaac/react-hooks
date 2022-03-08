@@ -12,6 +12,7 @@
     "clean": "rimraf .cache dist"
   },
   "devDependencies": {
+    "@shopify/jest-dom-mocks": "^3.0.15",
     "@testing-library/react-hooks": "^7.0.2",
     "@types/jest": "^27.0.2",
     "@types/jsdom": "^16.2.13",

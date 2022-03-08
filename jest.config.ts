@@ -20,17 +20,13 @@ export default {
     collectCoverage: true,
 
     // An array of glob patterns indicating a set of files for which coverage information should be collected
-    // collectCoverageFrom: [
-    //   "<rootDir>/**/*.tsx?"
-    // ],
+    // collectCoverageFrom: ['<rootDir>/**/*.tsx?'],
 
     // The directory where Jest should output its coverage files
     coverageDirectory: 'coverage',
 
     // An array of regexp pattern strings used to skip coverage collection
-    coveragePathIgnorePatterns: [
-        '/node_modules/'
-    ],
+    coveragePathIgnorePatterns: ['/node_modules/'],
 
     // Indicates which provider should be used to instrument code for coverage
     coverageProvider: 'v8',
@@ -127,12 +123,10 @@ export default {
     // runner: "jest-runner",
 
     // The paths to modules that run some code to configure or set up the testing environment before each test
-    setupFiles: [
-        '<rootDir>/setupTests.ts'
-    ],
+    setupFiles: ['<rootDir>/test/setupTests.ts'],
 
     // A list of paths to modules that run some code to configure or set up the testing framework before each test
-    // setupFilesAfterEnv: [],
+    setupFilesAfterEnv: ['<rootDir>/test/setupTestsAfterEnv.ts'],
 
     // The number of seconds after which a test is considered as slow and reported as such in the results.
     // slowTestThreshold: 5,
