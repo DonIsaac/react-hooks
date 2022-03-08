@@ -18,6 +18,12 @@
         "ecmaVersion": 13,
         "sourceType": "module"
     },
+    "ignorePatterns": [
+        "**/node_modules/**",
+        "**/dist/**",
+        "**/build/**",
+        "**/coverage/**",
+    ],
     "plugins": [
         "react",
         "react-hooks",
