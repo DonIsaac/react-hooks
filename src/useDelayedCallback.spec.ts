@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { renderHook, RenderHookResult } from '@testing-library/react-hooks'
 import {
     requestIdleCallback,
@@ -11,7 +12,7 @@ import { CancelablePromise, CancelablePromisify } from './lib/types'
 import useDelayedCallback from './useDelayedCallback'
 
 describe('useDelayedCallback', () => {
-    let cb = jest.fn()
+    const cb = jest.fn(() => 'foo')
     // let delayed: CancelablePromisify<(...args: any[]) => any>
     let delayed: RenderHookResult<
         unknown,
@@ -40,11 +41,11 @@ describe('useDelayedCallback', () => {
             // requestIdleCallback.runIdleCallbacks.bind(requestIdleCallback),
             run: () => requestIdleCallback.runIdleCallbacks(),
         },
-        {
-            strategy: 'animation',
-            // run: animationFrame.runFrame.bind(animationFrame),
-            run: () => animationFrame.runFrame(),
-        },
+        // {
+        //     strategy: 'animation',
+        //     // run: animationFrame.runFrame.bind(animationFrame),
+        //     run: () => animationFrame.runFrame(),
+        // },
         {
             strategy: 'timeout',
             // run: timer.runAllTimers.bind(timer)
@@ -52,90 +53,155 @@ describe('useDelayedCallback', () => {
         },
         // { strategy: 'resolve', run: promise.runPending.bind(promise) },
     ])('when using $strategy strategy', testCase => {
-        describe('when provided a synchronous callback', () => {
+        describe('when the cb is synchronous', () => {
+            let delayedCb: CancelablePromisify<(...args: any[]) => any>
             beforeEach(() => {
                 delayed = renderHook(
                     // prettier-ignore
                     () => useDelayedCallback(cb, [], { strategy: testCase.strategy as any, timeout: 0 })
                 )
+
+                delayedCb = delayed.result.current
             })
 
             afterEach(() => {
                 delayed.unmount()
+                delayedCb = undefined as any
             })
+
             it('should return a function', () => {
-                expect(delayed.result.current).toBeInstanceOf(Function)
+                expect(delayedCb).toBeInstanceOf(Function)
             })
 
             it('should not invoke the callback immediately', () => {
                 expect(cb).not.toHaveBeenCalled()
             })
 
-            it('when delayed is called, it returns a cancelable promise that resolves to whatever cb returns', () => {
-                cb.mockReturnValueOnce('foo')
-                const result = delayed.result.current()
-
+            it('the delayed callback should return a cancelable promise', () => {
+                const result = delayedCb()
                 expect(result).toBeInstanceOf(Promise)
                 expect(result.cancel).toBeInstanceOf(Function)
-
-                // timer.runAllTimers()
-                testCase.run()
-
-                return expect(result).resolves.toBe('foo')
-            })
-
-            it('when cb throws, the delayed function rejects with the error', () => {
-                const err = new Error('foo')
-                cb.mockImplementationOnce(() => {
-                    throw err
-                })
-
-                const result = delayed.result.current()
-                testCase.run()
-
-                return expect(result).rejects.toThrow(err)
-            })
-        })
-
-        describe('when provided an asynchronous callback', () => {
-            beforeEach(() => {
-                cb = jest.fn(async () => 'foo')
-                delayed = renderHook(
-                    // prettier-ignore
-                    () => useDelayedCallback(cb, [], { strategy: testCase.strategy as any, timeout: 0 })
-                )
-            })
-
-            afterEach(() => {
-                delayed.unmount()
-            })
-            it('should return a function', () => {
-                expect(delayed.result.current).toBeInstanceOf(Function)
-            })
-
-            it('should not invoke the callback immediately', () => {
-                expect(cb).not.toHaveBeenCalled()
             })
 
             it('when delayed is called, it returns a cancelable promise that resolves to whatever cb returns', async () => {
-                cb.mockImplementationOnce(async () => 'foo')
-                // timer.runAllTimers()
+                testCase.run()
+                const result = delayedCb()
                 testCase.run()
 
-                const actual = await delayed.result.current()
-                expect(actual).toBe('foo')
+                expect(await result).toBe('foo')
+            })
+        })
+
+        describe('when the cb is synchronous and throws', () => {
+            const error = new Error('foo')
+            const cbThrows = jest.fn(() => {
+                throw error
+            })
+            let delayedCb: CancelablePromisify<(...args: any[]) => any>
+
+            beforeEach(() => {
+                delayed = renderHook(
+                    // prettier-ignore
+                    () => useDelayedCallback(cbThrows, [], { strategy: testCase.strategy as any, timeout: 0 })
+                )
+                delayedCb = delayed.result.current
             })
 
-            it('when cb throws, the delayed function rejects with the error', () => {
-                const err = new Error('foo')
-                cb.mockImplementationOnce(async () => {
-                    throw err
-                })
+            afterEach(() => {
+                delayed.unmount()
+                cbThrows.mockClear()
+                delayedCb = undefined as any
+            })
 
-                const result = delayed.result.current()
+            it('the delayed function rejects with the error', () => {
+                const result = delayedCb()
                 testCase.run()
 
-                return expect(result).rejects.toThrow(err)
+                return expect(result).rejects.toThrow(error)
+            })
+        })
+
+        describe('when the cb is asynchronous', () => {
+            let delayedCb: CancelablePromisify<(...args: any[]) => any>
+            const asyncCb = jest.fn(() => Promise.resolve('foo'))
+
+            beforeEach(() => {
+                // cb = jest.fn(async () => 'foo')
+                delayed = renderHook(
+                    // prettier-ignore
+                    () => useDelayedCallback(asyncCb, [], { strategy: testCase.strategy as any, timeout: 0 })
+                )
+                delayedCb = delayed.result.current
+            })
+
+            afterEach(() => {
+                delayed.unmount()
+                asyncCb.mockClear()
+                delayedCb = undefined as any
+            })
+
+            it('should return a function', () => {
+                expect(delayedCb).toBeInstanceOf(Function)
+            })
+
+            it('should not invoke the callback immediately', () => {
+                expect(asyncCb).not.toHaveBeenCalled()
+            })
+
+            it('when delayed is called, it returns a cancelable promise that resolves to whatever cb returns', async () => {
+                testCase.run()
+
+                const actual = delayed.result.current()
+                testCase.run()
+                expect(await actual).toBe('foo')
+            })
+
+            // it('when cb throws, the delayed function rejects with the error', () => {
+            //     const err = new Error('foo')
+            //     cb.mockImplementationOnce(async () => {
+            //         throw err
+            //     })
+
+            //     const result = delayed.result.current()
+            //     testCase.run()
+
+            //     return expect(result).rejects.toThrow(err)
+            // })
+        })
+
+        describe('when the cb is async and throws', () => {
+            const error = new Error('foo')
+            const cbAsyncThrows = jest.fn(async () => {
+                throw error
+            })
+            let delayedCb: CancelablePromisify<(...args: any[]) => any>
+
+            beforeEach(() => {
+                delayed = renderHook(
+                    // prettier-ignore
+                    () => useDelayedCallback(cbAsyncThrows, [], { strategy: testCase.strategy as any, timeout: 0 })
+                )
+                delayedCb = delayed.result.current
+            })
+
+            afterEach(() => {
+                delayed.unmount()
+                cbAsyncThrows.mockClear()
+                delayedCb = undefined as any
+            })
+
+            it('the delayed function rejects with the error', async () => {
+                testCase.run()
+                const res = delayedCb()
+                testCase.run()
+
+                try {
+                    const awaitedRes = await res
+                    fail(`res should have thrown, got ${awaitedRes}`)
+                } catch (err) {
+                    expect(err).toBe(error)
+                }
+                // return expect(() => res).rejects //.toThrow(error)
             })
         })
 
