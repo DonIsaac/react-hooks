@@ -13,7 +13,6 @@ import useDelayedCallback from './useDelayedCallback'
 
 describe('useDelayedCallback', () => {
     const cb = jest.fn(() => 'foo')
-    // let delayed: CancelablePromisify<(...args: any[]) => any>
     let delayed: RenderHookResult<
         unknown,
         (...args: any[]) => CancelablePromise<any>
@@ -23,14 +22,12 @@ describe('useDelayedCallback', () => {
         requestIdleCallback.mock()
         animationFrame.mock()
         timer.mock()
-        // promise.mock()
     })
 
     afterEach(() => {
         requestIdleCallback.restore()
         animationFrame.restore()
         timer.restore()
-        // promise.restore()
         cb.mockClear()
     })
 
@@ -77,18 +74,28 @@ describe('useDelayedCallback', () => {
                 expect(cb).not.toHaveBeenCalled()
             })
 
-            it('the delayed callback should return a cancelable promise', () => {
-                const result = delayedCb()
-                expect(result).toBeInstanceOf(Promise)
-                expect(result.cancel).toBeInstanceOf(Function)
-            })
+            describe('when the delayed callback is invoked', () => {
+                let result: CancelablePromise<any>
+                let resultAwaited: any
 
-            it('when delayed is called, it returns a cancelable promise that resolves to whatever cb returns', async () => {
-                testCase.run()
-                const result = delayedCb()
-                testCase.run()
+                beforeEach(async () => {
+                    result = delayedCb()
+                    testCase.run()
+                    resultAwaited = await result
+                })
 
-                expect(await result).toBe('foo')
+                it('the delayed callback should return a cancelable promise', () => {
+                    expect(result).toBeInstanceOf(Promise)
+                    expect(result.cancel).toBeInstanceOf(Function)
+                })
+
+                it('should invoke the callback', async () => {
+                    expect(cb).toHaveBeenCalledTimes(1)
+                })
+
+                it('should return the result of the callback', async () => {
+                    expect(resultAwaited).toBe('foo')
+                })
             })
         })
 
@@ -148,25 +155,29 @@ describe('useDelayedCallback', () => {
                 expect(asyncCb).not.toHaveBeenCalled()
             })
 
-            it('when delayed is called, it returns a cancelable promise that resolves to whatever cb returns', async () => {
-                testCase.run()
+            describe('when the delayed callback is invoked', () => {
+                let result: CancelablePromise<any>
+                let resultAwaited: any
 
-                const actual = delayed.result.current()
-                testCase.run()
-                expect(await actual).toBe('foo')
+                beforeEach(async () => {
+                    result = delayedCb()
+                    testCase.run()
+                    resultAwaited = await result
+                })
+
+                it('the delayed callback should return a cancelable promise', () => {
+                    expect(result).toBeInstanceOf(Promise)
+                    expect(result.cancel).toBeInstanceOf(Function)
+                })
+
+                it('should invoke the callback', async () => {
+                    expect(asyncCb).toHaveBeenCalledTimes(1)
+                })
+
+                it('should return the result of the callback', async () => {
+                    expect(resultAwaited).toBe('foo')
+                })
             })
-
-            // it('when cb throws, the delayed function rejects with the error', () => {
-            //     const err = new Error('foo')
-            //     cb.mockImplementationOnce(async () => {
-            //         throw err
-            //     })
-
-            //     const result = delayed.result.current()
-            //     testCase.run()
-
-            //     return expect(result).rejects.toThrow(err)
-            // })
         })
 
         describe('when the cb is async and throws', () => {
@@ -201,178 +212,7 @@ describe('useDelayedCallback', () => {
                 } catch (err) {
                     expect(err).toBe(error)
                 }
-                // return expect(() => res).rejects //.toThrow(error)
             })
         })
-
-        // describe.each([
-        //     ['synchronous', 'foo'],
-        //     ['asynchronous', Promise.resolve('foo')],
-        // ])('when provided a %s function', (type, ret) => {
-        //     beforeEach(() => {
-        //         // cb.mockImplementation(cbImpl)
-        //         // delayed = renderHook(
-        //         //     // prettier-ignore
-        //         //     () => useDelayedCallback(cb, [], { strategy: 'timeout' })
-        //         // )
-        //     })
-
-        //     it('should return a function', () => {
-        //         expect(delayed.result.current).toBeInstanceOf(Function)
-        //     })
-
-        //     it('should not invoke the callback immediately', () => {
-        //         expect(cb).not.toHaveBeenCalled()
-        //     })
-
-        //     it('when delayed is called, it returns a cancelable promise that resolves to whatever cb returns', () => {
-        //         cb.mockReturnValueOnce(ret)
-        //         const result = delayed.result.current()
-
-        //         expect(result).toBeInstanceOf(Promise)
-        //         expect(result.cancel).toBeInstanceOf(Function)
-
-        //         // timer.runAllTimers()
-        //         testCase.run()
-
-        //         return expect(result).resolves.toBe(ret)
-        //     })
-
-        //     it('when cb throws, the delayed function rejects with the error', () => {
-        //         const err = new Error('foo')
-        //         cb.mockImplementationOnce(() => {
-        //             throw err
-        //         })
-
-        //         const result = delayed.result.current('foo')
-        //         testCase.run()
-
-        //         return expect(result).rejects.toThrow(err)
-        //     })
-        // })
     })
-
-    // describe('timer strategy', () => {
-    //     beforeEach(() => {
-    //         delayed = renderHook(
-    //             // prettier-ignore
-    //             () => useDelayedCallback(cb, [], { strategy: 'timeout' })
-    //         )
-    //     })
-
-    //     it('returns a function', () => {
-    //         expect(delayed.result.current).toBeInstanceOf(Function)
-    //     })
-
-    //     it('when delayed is called, it returns a cancelable promise that resolves to whatever cb returns', () => {
-    //         // cb.mockReturnValueOnce('foo')
-    //         const result = delayed.result.current('foo')
-
-    //         expect(result).toBeInstanceOf(Promise)
-    //         expect(result.cancel).toBeInstanceOf(Function)
-
-    //         // timer.runAllTimers()
-    //         timer.runAllTimers()
-
-    //         return expect(result).resolves.toBe('foo')
-    //     })
-
-    //     it('when cb throws, the delayed function rejects with the error', () => {
-    //         const err = new Error('foo')
-    //         cb.mockImplementationOnce(() => {
-    //             throw err
-    //         })
-
-    //         const result = delayed.result.current('foo')
-    //         timer.runAllTimers()
-
-    //         return expect(result).rejects.toThrow(err)
-    //     })
-    // })
 })
-
-// describe('when given a synchronous callback', () => {
-//     beforeEach(() => {
-//         delayed = renderHook(
-//             // prettier-ignore
-//             () => useDelayedCallback(cb, [], { strategy: 'timeout' })
-//         )
-//     })
-
-//     it('should return a function', () => {
-//         expect(delayed.result.current).toBeInstanceOf(Function)
-//     })
-
-//     it('should not invoke the callback immediately', () => {
-//         expect(cb).not.toHaveBeenCalled()
-//     })
-
-//     it('when delayed is called, it returns a cancelable promise that resolves to whatever the callback returns', () => {
-//         cb.mockReturnValueOnce('foo')
-//         const result = delayed.result.current()
-
-//         expect(result).toBeInstanceOf(Promise)
-//         expect(result.cancel).toBeInstanceOf(Function)
-
-//         timer.runAllTimers()
-
-//         return expect(result).resolves.toBe('foo')
-//     })
-
-//     it('when cb throws, the delayed function rejects with the error', () => {
-//         const err = new Error('foo')
-//         cb.mockImplementationOnce(() => {
-//             throw err
-//         })
-
-//         const result = delayed.result.current()
-//         timer.runAllTimers()
-
-//         return expect(result).rejects.toThrow(err)
-//     })
-// })
-
-// describe('when using idle strategy', () => {
-//     beforeEach(() => {
-//         delayed = renderHook(
-//             // prettier-ignore
-//             () => useDelayedCallback(cb, [], { strategy: 'idle' })
-//         )
-//     })
-
-//     it('should return a function', () => {
-//         expect(delayed.result.current).toBeInstanceOf(Function)
-//     })
-
-//     it('should not invoke the callback immediately', () => {
-//         expect(cb).not.toHaveBeenCalled()
-//     })
-
-//     it('when delayed is called, it returns a cancelable promise that resolves to whatever the callback returns', () => {
-//         cb.mockReturnValueOnce('foo')
-//         const result = delayed.result.current()
-
-//         expect(result).toBeInstanceOf(Promise)
-//         expect(result.cancel).toBeInstanceOf(Function)
-
-//         requestIdleCallback.runIdleCallbacks()
-
-//         return expect(result).resolves.toBe('foo')
-//     })
-
-//     it('when cb throws, the delayed function rejects with the error', () => {
-//         const err = new Error('foo')
-//         cb.mockImplementationOnce(() => {
-//             throw err
-//         })
-
-//         const result = delayed.result.current()
-//         requestIdleCallback.runIdleCallbacks()
-
-//         return expect(result).rejects.toThrow(err)
-//     })
-// })
-// describe.each([
-//     jest.fn()
-// ])
-// })

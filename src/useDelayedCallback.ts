@@ -26,14 +26,14 @@ type Handle = number
  *
  * @private
  */
-type DelayStrategyArray<T extends (callback: () => void, ...args: any[]) => Handle, O = void> = T extends (
-    callback: () => void,
-    opts?: infer P
-) => Handle
+type DelayStrategyArray<
+    T extends (callback: () => void, ...args: any[]) => Handle,
+    O = void
+> = T extends (callback: () => void, opts?: infer P) => Handle
     ? [
           requestDelayedCallback: T,
           cancelDelayedCallback: (handle: Handle) => void,
-          opts?: (O extends void ? P : O)
+          opts?: O extends void ? P : O
       ]
     : [
           requestDelayedCallback: T,
@@ -83,15 +83,11 @@ const useDelayedCallback = <T extends (...args: any[]) => any>(
 
     // Get the functions that will invoke and cancel the callback.
     // Which exact functions are used depends on the strategy.
-    const [requestDelayedCallback, cancelDelayedCallback, opts] = useMemo(
-        () => {
+    const [requestDelayedCallback, cancelDelayedCallback, opts] =
+        useMemo(() => {
             const strategies: DelayStrategies = {
                 // Use the `requestIdleCallback` function.
-                idle: [
-                    requestIdleCallback,
-                    cancelIdleCallback,
-                    { timeout },
-                ],
+                idle: [requestIdleCallback, cancelIdleCallback, { timeout }],
 
                 // Use the `requestAnimationFrame` function.
                 animation: [
@@ -101,20 +97,18 @@ const useDelayedCallback = <T extends (...args: any[]) => any>(
                 ],
 
                 // Use the `setTimeout` function.
-                timeout: [
-                    setTimeout,
-                    clearTimeout,
-                    timeout,
-                ],
+                timeout: [setTimeout, clearTimeout, timeout],
 
                 // Use the `Promise.resolve` function.
                 // FIXME: This has no handle
                 resolve: [
-                    (cb: () => void, opts?: any): number => (Promise.resolve().then(() => cb()), NaN),
+                    (cb: () => void, opts?: any): number => (
+                        Promise.resolve().then(() => cb()), NaN
+                    ),
                     // eslint-disable-next-line @typescript-eslint/no-empty-function
                     (handle: Handle) => {}, // FIXME: this could be problematic
                     undefined,
-                ]
+                ],
             }
 
             return strategies[strategy]
