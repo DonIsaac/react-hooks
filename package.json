@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "packageManager": "yarn@1.22.17",
+  "packageManager": "yarn@3.2.0",
   "scripts": {
     "test": "jest",
     "build": "tsc",

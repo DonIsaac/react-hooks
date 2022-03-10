@@ -1,9 +1,27 @@
+# dependencies
 node_modules
+
+# Build and test artifacts
 coverage
 .cache
 *.tsbuildinfo
 dist
-*.log
+
+# Editor files
 *.swp
 *.swo
+
+# Temporary files
+*.log
+
+# yarn w/o zero-installs
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+
+# MacOS
 .DS_Store

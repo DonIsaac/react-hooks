@@ -13,14 +13,27 @@ import { CancelablePromise, CancelablePromisify } from './lib/types'
  * @private
  */
 type Handle = number
-type DelayStrategyArray<T extends (...args: any) => Handle> = T extends (
+
+/**
+ * Delay Strategies control how callbacks are deffered. This array contains
+ * 3 items:
+ *
+ * 1. The function that will request the callback. It returns a handle that
+ *    can be used to cancel the callback.
+ * 2. The function that cancels a currently pending callback using its handle
+ * 3. The options that are passed to the request function. This is undefined
+ *    for request functions that don't take options.
+ *
+ * @private
+ */
+type DelayStrategyArray<T extends (callback: () => void, ...args: any[]) => Handle, O = void> = T extends (
     callback: () => void,
     opts?: infer P
 ) => Handle
     ? [
           requestDelayedCallback: T,
           cancelDelayedCallback: (handle: Handle) => void,
-          opts?: P
+          opts?: (O extends void ? P : O)
       ]
     : [
           requestDelayedCallback: T,
@@ -28,8 +41,34 @@ type DelayStrategyArray<T extends (...args: any) => Handle> = T extends (
           opts: undefined
       ]
 
+type DelayStrategies = {
+    idle: DelayStrategyArray<typeof requestIdleCallback>
+    animation: DelayStrategyArray<typeof requestAnimationFrame>
+    timeout: DelayStrategyArray<typeof setTimeout>
+    resolve: DelayStrategyArray<(cb: () => void, opts?: any) => Handle>
+}
+// export type DelayStrategy = 'idle' | 'animation' | 'timeout' | 'resolve'
+export type DelayStrategy = keyof DelayStrategies
+
 export interface DelayedCallbackOptions {
-    strategy?: 'idle' | 'animation' | 'timeout' | 'resolve'
+    /**
+     * The delay strategy to use.
+     *
+     * - `idle`: Use the `requestIdleCallback` function.
+     * - `animation`: Use the `requestAnimationFrame` function.
+     * - `timeout`: Use the `setTimeout` function.
+     * - `resolve`: Use the `Promise.resolve` function.
+     *
+     * @see {@link DelayStrategyArray}
+     *
+     * @see [MDN - requestIdleCallback](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback)
+     * @see [MDN - requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame)
+     * @see [MDN - setTimeout](https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout)
+     * @see [MDN - Promise.resolve](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve)
+     *
+     * @default 'idle'
+     */
+    strategy?: DelayStrategy
     timeout?: number
 }
 
@@ -45,40 +84,41 @@ const useDelayedCallback = <T extends (...args: any[]) => any>(
     // Get the functions that will invoke and cancel the callback.
     // Which exact functions are used depends on the strategy.
     const [requestDelayedCallback, cancelDelayedCallback, opts] = useMemo(
-        () =>
-            ({
+        () => {
+            const strategies: DelayStrategies = {
+                // Use the `requestIdleCallback` function.
                 idle: [
                     requestIdleCallback,
                     cancelIdleCallback,
                     { timeout },
-                ] as DelayStrategyArray<typeof requestIdleCallback>,
+                ],
 
+                // Use the `requestAnimationFrame` function.
                 animation: [
                     requestAnimationFrame,
                     cancelAnimationFrame,
                     undefined,
-                ] as DelayStrategyArray<typeof requestAnimationFrame>,
+                ],
 
+                // Use the `setTimeout` function.
                 timeout: [
                     setTimeout,
                     clearTimeout,
                     timeout,
-                ] as DelayStrategyArray<typeof setTimeout>,
+                ],
 
+                // Use the `Promise.resolve` function.
                 // FIXME: This has no handle
                 resolve: [
-                    (cb: () => void) => Promise.resolve().then(() => cb()),
+                    (cb: () => void, opts?: any): number => (Promise.resolve().then(() => cb()), NaN),
                     // eslint-disable-next-line @typescript-eslint/no-empty-function
-                    () => {}, // FIXME: this could be problematic
+                    (handle: Handle) => {}, // FIXME: this could be problematic
                     undefined,
-                ],
-            }[strategy] as [
-                (callback: () => void, opts?: Record<string, any>) => Handle,
-                (handle: Handle) => void,
-                any
-            ]),
-        [strategy, timeout]
-    )
+                ]
+            }
+
+            return strategies[strategy]
+        }, [strategy, timeout])
 
     // Create the delayed callback.
     const delayedCallback = useCallback<CancelablePromisify<T>>(
@@ -99,9 +139,9 @@ const useDelayedCallback = <T extends (...args: any[]) => any>(
                         // NOTE: handle could be 0
                         handle != null && cancelList.current.delete(handle)
                     }
-                }, opts)
+                }, opts) as Handle | undefined
 
-                cancelList.current.add(handle)
+                handle && cancelList.current.add(handle)
             })
 
             ;(promise as CancelablePromise<ReturnType<T>>).cancel = () => {
