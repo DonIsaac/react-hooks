@@ -54,10 +54,10 @@ export interface DelayedCallbackOptions {
     /**
      * The delay strategy to use.
      *
-     * - `idle`: Use the `requestIdleCallback` function.
-     * - `animation`: Use the `requestAnimationFrame` function.
-     * - `timeout`: Use the `setTimeout` function.
-     * - `resolve`: Use the `Promise.resolve` function.
+     * - `idle`: Use the {@link requestIdleCallback} function.
+     * - `animation`: Use the {@link requestAnimationFrame} function.
+     * - `timeout`: Use the {@link setTimeout} function.
+     * - `resolve`: Use the {@link Promise.resolve} function.
      *
      * @see {@link DelayStrategyArray}
      *
@@ -72,6 +72,27 @@ export interface DelayedCallbackOptions {
     timeout?: number
 }
 
+/**
+ * Wraps a callback function to delay its execution. This is a drop-in
+ * replacement for {@link useCallback} that allows you to specify a delay
+ * strategy.
+ *
+ * How long the callback is delayed for depends on the strategy. See
+ * {@link DelayedCallbackOptions.strategy} for available strategies and their
+ * behaviors.
+ *
+ * The new callback will always be asynchronous. The returned promise can be
+ * canceled by using the {@link CancelablePromise.cancel} method.
+ *
+ * @param callback    The callback to decorate.
+ * @param deps        Dependencies that, if changed, will cause the callback to
+ *                    be updated.
+ * @param options     Optional {@link DelayedCallbackOptions options object}.
+ *
+ * @returns A memoized, delayed version of `callback`.
+ *
+ * @see {@link CancelablePromise}
+ */
 const useDelayedCallback = <T extends (...args: any[]) => any>(
     callback: T,
     deps: DependencyList,
