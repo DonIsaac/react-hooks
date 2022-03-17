@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { RequestState, RequestStatus } from './types'
 
+export type { RequestState, RequestStatus }
+
 /**
  * Sends a fetch request to a URL.
  *

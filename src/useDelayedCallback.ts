@@ -15,7 +15,7 @@ import { CancelablePromise, CancelablePromisify } from './lib/types'
 type Handle = number
 
 /**
- * Delay Strategies control how callbacks are deffered. This array contains
+ * Delay Strategies control how callbacks are deferred. This array contains
  * 3 items:
  *
  * 1. The function that will request the callback. It returns a handle that
