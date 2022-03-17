@@ -73,7 +73,7 @@ response bodies contain images, they are parsed into
 
 ```tsx
 import { FC, useState, useEffect } from 'react'
-import useFetch, { RequestState, RequestStatus } from 'react-hooks/useFetch
+import useFetch, { RequestState, RequestStatus } from 'react-hooks/useFetch'
 
 import defaultProfilePicture from './img/default-profile.png'
 
@@ -122,7 +122,7 @@ you to run expensive or lazy code you don't need done immediately, keeping the
 unblocked.
 
 ### Delay Strategies
-> For a high-level description of Node's event loop, checkout [this docs page](https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/)
+> For a high-level description of Node's event loop, checkout [this docs page](https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/).
 
 To tell the hook how to defer the function, provide it a _strategy_. By default,
 `idle` is used. The available strategies are:
@@ -139,17 +139,17 @@ To tell the hook how to defer the function, provide it a _strategy_. By default,
   [setTimeout](https://developer.mozilla.org/en-US/docs/Web/API/setTimeout).
 
 - `resolve`: The function will execute after all remaining currently scheduled
-events have run. More specifically, execution is pushed to the end of the
-microtask queue for the current event loop stage by using
-[Promise.resolve().then()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve).
-See [this PR](https://github.com/nodejs/node-v0.x-archive/pull/8325) for
-microtask queue details.
+  events have run. More specifically, execution is pushed to the end of the
+  microtask queue for the current event loop stage by using
+  [Promise.resolve().then()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve).
+  See [this PR](https://github.com/nodejs/node-v0.x-archive/pull/8325) for
+  microtask queue details.
 
 - `resolve`: The function's execution is pushed to the end of the event queue.
   It will execute within the event loop cycle it was called in, but after all
   other currently pending events have been processed. uses
   
-
+> NOTE:
 > Some strategies rely on nitty-gritty details of the event loop. Because of this,
 > runtime behavior may differ depending on where you're running your
 > application.For example, Node uses [libuv](https://libuv.org/) while Chrome uses
@@ -164,6 +164,9 @@ method to prevent execution if it hasn't run yet or prevent chained promises
 from being called if it has. Additionally, pending callbacks will be canceled
 when the component unmounts, making it safe to run `useState()` setters within
 your callback.
+
+### Example
+_TODO_
 
 ----
 
@@ -234,7 +237,7 @@ export const MyComponent: FC<{ logger?: typeof Console }> = ({
 
     return <div>{result}</div>
 }
-
+```
 ----
 
 ## `useMount(effect)`
