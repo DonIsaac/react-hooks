@@ -1,11 +1,9 @@
 import { EffectCallback, useEffect } from 'react'
 
 /**
- * Similar to
- * [useEffect()](https://reactjs.org/docs/hooks-reference.html#useeffect), but
- * `effect` is only called once after the component has completed its initial
- * render and has been mounted to the DOM. You can think of this as the hook
- * version of `componentDidMount()`.
+ * Similar to {@link useEffect}, but `effect` is only called once after the
+ * component has completed its initial render and has been mounted to the DOM.
+ * You can think of this as the hook version of `componentDidMount()`.
  *
  * @example
  * ```tsx
@@ -22,7 +20,7 @@ import { EffectCallback, useEffect } from 'react'
  *     return <div />
  * }
  * ```
- * 
+ *
  * @param effect The effect to be called after the component has been mounted to
  *              the DOM.
  */
