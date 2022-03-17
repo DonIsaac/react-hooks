@@ -34,7 +34,7 @@ in the response body will be parsed into an object.
 
 ```ts
 import { FC, useEffect } from 'react'
-import useFetch, { RequestState, RequestStatus } from 'react-hooks/useFetch
+import useFetch, { RequestState, RequestStatus } from 'react-hooks/useFetch'
 
 type TodoTasks = string[]
 
@@ -210,7 +210,7 @@ Performance Timeline. This lets you monitor time-consuming operations.
 ```tsx
 import { FC, useCallback, useEffect } from 'react'
 import useMeasuredCallback from 'react-hooks/useMeasuredCallback'
-import intensiveTask from './intensiveTask
+import intensiveTask from './intensiveTask'
 
 export const MyComponent: FC<{ logger?: typeof Console }> = ({
     logger = console
@@ -249,7 +249,7 @@ and has been mounted to the DOM. You can think of this as the hook version of
 
 ```tsx
 import { FC } from 'react'
-import useMount from 'react-hooks/useMount
+import useMount from 'react-hooks/useMount'
 
 export const MyComponent: FC = () => {
     useMount(() => {
@@ -272,7 +272,7 @@ Similar to `useMount()`, except it returns a boolean that is set to true when th
 
 ```tsx
 import { FC } from 'react'
-import useDidMount from 'react-hooks/useDidMount
+import useDidMount from 'react-hooks/useDidMount'
 
 export const MyComponent: FC = () => {
     const isMounted = useDidMount()
