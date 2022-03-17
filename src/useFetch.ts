@@ -4,14 +4,14 @@ import { RequestState, RequestStatus } from './types'
 export type { RequestState, RequestStatus }
 
 /**
- * Sends a fetch request to a URL.
+ * Sends a {@link fetch} request to a URL.
  *
  * @param url  The URL to send the request to.
  * @param opts Additional request options to pass to `fetch`.
  *
  * The request can be in one of three states: `pending`, `success`, and `error`.
  * The current state is made available from the `status` property on the
- * returned {@link FetchState} object.
+ * returned {@link RequestState} object.
  *
  * Before a response is received, the request is `pending`. Both `data` and
  * `error` are `null`. If the response has a successful status code and parsing
@@ -21,12 +21,15 @@ export type { RequestState, RequestStatus }
  * stored in `error` and `status` is set to `error`.
  *
  * @template T The type of data received from the response payload.
+ * @template E The type of error object received from the response payload.
+ * Defaults to {@link Error}.
  *
  * @returns An object containing the request status, response data (on success),
  * and response error (on error).
  *
  * @see {@link RequestState}
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API MDN Fetch API}
+ * @see
+ * {@link https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API MDN Fetch API}
  */
 export default function useFetch<T = any, E = Error>(
     url: string,
