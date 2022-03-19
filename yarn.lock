@@ -979,7 +979,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
+"@types/node@npm:*, @types/node@npm:^17.0.21":
   version: 17.0.21
   resolution: "@types/node@npm:17.0.21"
   checksum: 89dcd2fe82f21d3634266f8384e9c865cf8af49685639fbdbd799bdd1040480fb1e8eeda2d3b9fce41edbe704d2a4be9f427118c4ae872e8d9bb7cbeb3c41a94
@@ -2815,6 +2815,7 @@ __metadata:
     "@testing-library/react-hooks": ^7.0.2
     "@types/jest": ^27.0.2
     "@types/jsdom": ^16.2.13
+    "@types/node": ^17.0.21
     "@types/react": ^17.0.34
     "@types/react-test-renderer": ^17.0.1
     "@typescript-eslint/eslint-plugin": ^5.3.0

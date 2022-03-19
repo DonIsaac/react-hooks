@@ -8,7 +8,7 @@ import {
     promise,
 } from '@shopify/jest-dom-mocks'
 import { SynchronousPromise } from 'synchronous-promise'
-import { CancelablePromise, CancelablePromisify } from './lib/types'
+import { CancelablePromise, CancelablePromisify } from './lib/cancelablePromise'
 import useDelayedCallback from './useDelayedCallback'
 
 describe('useDelayedCallback', () => {
@@ -17,19 +17,6 @@ describe('useDelayedCallback', () => {
         unknown,
         (...args: any[]) => CancelablePromise<any>
     >
-
-    beforeEach(() => {
-        requestIdleCallback.mock()
-        animationFrame.mock()
-        timer.mock()
-    })
-
-    afterEach(() => {
-        requestIdleCallback.restore()
-        animationFrame.restore()
-        timer.restore()
-        cb.mockClear()
-    })
 
     describe.each([
         {
@@ -50,6 +37,19 @@ describe('useDelayedCallback', () => {
         },
         // { strategy: 'resolve', run: promise.runPending.bind(promise) },
     ])('when using $strategy strategy', testCase => {
+        beforeEach(() => {
+            requestIdleCallback.mock()
+            animationFrame.mock()
+            timer.mock()
+        })
+
+        afterEach(() => {
+            requestIdleCallback.restore()
+            animationFrame.restore()
+            timer.restore()
+            cb.mockClear()
+        })
+
         describe('when the cb is synchronous', () => {
             let delayedCb: CancelablePromisify<(...args: any[]) => any>
             beforeEach(() => {
@@ -76,12 +76,10 @@ describe('useDelayedCallback', () => {
 
             describe('when the delayed callback is invoked', () => {
                 let result: CancelablePromise<any>
-                let resultAwaited: any
 
                 beforeEach(async () => {
                     result = delayedCb()
                     testCase.run()
-                    resultAwaited = await result
                 })
 
                 it('the delayed callback should return a cancelable promise', () => {
@@ -94,7 +92,22 @@ describe('useDelayedCallback', () => {
                 })
 
                 it('should return the result of the callback', async () => {
+                    const resultAwaited = await result
                     expect(resultAwaited).toBe('foo')
+                })
+            })
+
+            describe('when the delayed callback is invoked then canceled', () => {
+                let result: CancelablePromise<any>
+
+                beforeEach(async () => {
+                    result = delayedCb()
+                    result.cancel()
+                    testCase.run()
+                })
+
+                it('should not invoke the callback', async () => {
+                    expect(cb).toHaveBeenCalledTimes(0)
                 })
             })
         })
@@ -120,11 +133,19 @@ describe('useDelayedCallback', () => {
                 delayedCb = undefined as any
             })
 
-            it('the delayed function rejects with the error', () => {
+            it('the delayed callback rejects with the error', () => {
                 const result = delayedCb()
                 testCase.run()
 
                 return expect(result).rejects.toThrow(error)
+            })
+
+            it('when canceled, the delayed callback does not reject and does not invoke the underlying callback', () => {
+                const result = delayedCb()
+                result.catch(err => fail(`should not reject: ${err}`))
+                result.cancel()
+                testCase.run()
+                expect(cbThrows).not.toBeCalled()
             })
         })
 
@@ -178,6 +199,20 @@ describe('useDelayedCallback', () => {
                     expect(resultAwaited).toBe('foo')
                 })
             })
+
+            describe('when the delayed callback is invoked then canceled', () => {
+                let result: CancelablePromise<any>
+
+                beforeEach(() => {
+                    result = delayedCb()
+                    result.cancel()
+                    testCase.run()
+                })
+
+                it('should not invoke the callback', async () => {
+                    expect(cb).toHaveBeenCalledTimes(0)
+                })
+            })
         })
 
         describe('when the cb is async and throws', () => {
@@ -212,6 +247,20 @@ describe('useDelayedCallback', () => {
                 } catch (err) {
                     expect(err).toBe(error)
                 }
+            })
+
+            it('when canceled, does not reject nor invoke the underlying callback', () => {
+                testCase.run()
+                const res = delayedCb()
+                res.catch(err =>
+                    fail(
+                        `Canceled promise should not have rejected, got ${err}`
+                    )
+                )
+                res.cancel()
+                testCase.run()
+
+                expect(cbAsyncThrows).not.toBeCalled()
             })
         })
     })

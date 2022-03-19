@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { RequestState, RequestStatus } from './types'
+import { parseBody } from './lib/parseBody'
 
 export type { RequestState, RequestStatus }
 
@@ -73,19 +74,4 @@ export default function useFetch<T = any, E = Error>(
         // TODO add opts back.
     }, [url])
     return { status, data, error } as RequestState<T, E>
-}
-
-async function parseBody<T>(res: Response): Promise<T> {
-    try {
-        const contentType = res.headers.get('Content-Type') ?? ''
-        if (!contentType.length || contentType.includes('application/json')) {
-            return res.json()
-        } else if (contentType.includes('text')) {
-            return res.text() as unknown as T
-        } else {
-            return res.blob() as unknown as T
-        }
-    } catch (err) {
-        return res.text() as unknown as T
-    }
 }

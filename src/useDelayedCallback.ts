@@ -7,7 +7,7 @@ import {
     useRef,
     useDebugValue,
 } from 'react'
-import { CancelablePromise, CancelablePromisify } from './lib/types'
+import { CancelablePromise, CancelablePromisify } from './lib/cancelablePromise'
 
 /**
  * @private
