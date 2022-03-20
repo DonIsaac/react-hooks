@@ -3,8 +3,6 @@ import { RequestState, RequestStatus } from './types'
 import { parseBody } from './lib/parseBody'
 import useMemoCompare from './useMemoCompare'
 
-export type { RequestState, RequestStatus }
-
 /**
  * Sends a {@link fetch} request to a URL.
  *

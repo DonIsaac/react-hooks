@@ -7,7 +7,16 @@ type Key = string | symbol | number
 export default function deepEqual(a: unknown, b: unknown): boolean {
     if (Object.is(a, b)) return true
 
-    if (typeof a === 'object') {
+    if (a instanceof Array) {
+        if (!(b instanceof Array)) return false
+        if (a.length !== b.length) return false
+
+        for (let i = 0; i < a.length; i++) {
+            if (!deepEqual(a[i], b[i])) return false
+        }
+
+        return true
+    } else if (typeof a === 'object') {
         if (typeof b !== 'object') return false
         // If a is nullish but a and b didn't pass the Object.is()
         // check, that means a is null and b is undefined or vice versa
@@ -28,15 +37,6 @@ export default function deepEqual(a: unknown, b: unknown): boolean {
             ) {
                 return false
             }
-        }
-
-        return true
-    } else if (a instanceof Array) {
-        if (!(b instanceof Array)) return false
-        if (a.length !== b.length) return false
-
-        for (let i = 0; i < a.length; i++) {
-            if (!deepEqual(a[i], b[i])) return false
         }
 
         return true

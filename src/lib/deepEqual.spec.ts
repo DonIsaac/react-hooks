@@ -117,4 +117,10 @@ describe('deepEqual(a, b)', () => {
 
         expect(deepEqual(a, b)).toBe(false)
     })
+
+    it('returns true for equivalent objects with differently ordered keys', () => {
+        const a = { foo: 1, bar: 2 }
+        const b = { bar: 2, foo: 1 }
+        expect(deepEqual(a, b)).toBe(true)
+    })
 })

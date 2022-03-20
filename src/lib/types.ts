@@ -6,4 +6,3 @@ export type Promisify<T extends (...args: any[]) => any> = T extends (
     : (...args: Parameters<T>) => Promise<ReturnType<T>>
 
 export type Nullish<T> = T | null | undefined
-
