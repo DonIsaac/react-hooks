@@ -1,13 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useDebugValue } from 'react'
 import { RequestState, RequestStatus } from './types'
 import { parseBody } from './lib/parseBody'
+import useMemoCompare from './useMemoCompare'
 
 export type { RequestState, RequestStatus }
 
 /**
  * Sends a {@link fetch} request to a URL.
  *
- * @param url  The URL to send the request to.
+ * @param to  The URL to send the request to.
  * @param opts Additional request options to pass to `fetch`.
  *
  * The request can be in one of three states: `pending`, `success`, and `error`.
@@ -33,21 +34,25 @@ export type { RequestState, RequestStatus }
  * {@link https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API MDN Fetch API}
  */
 export default function useFetch<T = any, E = Error>(
-    url: string,
+    to: RequestInfo,
     opts?: RequestInit
 ): RequestState<T, E> {
     const [data, setData] = useState<T | null>(null)
     const [error, setError] = useState<E | null>(null)
     const [status, setStatus] = useState<RequestStatus>('pending')
+    useDebugValue(status)
+
+    const memoTo = useMemoCompare(to)
+    const memoOpts = useMemoCompare(opts)
 
     useEffect(() => {
         const sendRequest = async () => {
-            if (url === '') {
+            if (!memoTo) {
                 return
             }
 
             try {
-                const res = await fetch(url, opts)
+                const res = await fetch(memoTo, memoOpts)
 
                 // If the request fails, set the error object. Response may contain
                 // error details - include them if available
@@ -72,6 +77,6 @@ export default function useFetch<T = any, E = Error>(
 
         sendRequest()
         // TODO add opts back.
-    }, [url])
+    }, [memoTo, memoOpts])
     return { status, data, error } as RequestState<T, E>
 }

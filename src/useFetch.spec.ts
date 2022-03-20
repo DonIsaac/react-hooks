@@ -138,8 +138,6 @@ describe('When fetch returns an image', () => {
     })
 
     it('data should be a blob', () => {
-        // console.log(actual.data)
-        // expect(actual.data).toBeInstanceOf(Blob)
         expect(actual.data.constructor.name).toEqual('Blob')
     })
 
