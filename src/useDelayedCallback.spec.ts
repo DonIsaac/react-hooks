@@ -4,10 +4,8 @@ import {
     requestIdleCallback,
     animationFrame,
     timer,
-    clock,
-    promise,
 } from '@shopify/jest-dom-mocks'
-import { SynchronousPromise } from 'synchronous-promise'
+// import { SynchronousPromise } from 'synchronous-promise'
 import { CancelablePromise, CancelablePromisify } from './lib/cancelablePromise'
 import useDelayedCallback from './useDelayedCallback'
 
