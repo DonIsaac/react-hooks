@@ -1,0 +1,13 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "noEmit": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true
+    },
+    "exclude": [
+        "**/*.spec.ts",
+        "**/*.spec.tsx"
+    ]
+}

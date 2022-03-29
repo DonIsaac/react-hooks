@@ -1,15 +1,24 @@
 {
-  "name": "hooks",
+  "name": "@donisaac/react-hooks",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "license": "MIT",
   "packageManager": "yarn@3.2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DonIsaac/react-hooks.git"
+  },
+  "author": {
+    "name": "Donald Isaac",
+    "url": "https://donisaac.dev"
+  },
   "scripts": {
     "test": "jest",
     "build": "tsc",
     "lint": "eslint src",
     "lint:fix": "yarn lint --fix",
-    "tc": "tsc --noEmit --noImplicitReturns --noUnusedLocals --pretty",
+    "tc": "tsc -p tsconfig.strict.json",
     "clean": "rimraf .cache dist"
   },
   "devDependencies": {

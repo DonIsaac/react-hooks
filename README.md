@@ -9,6 +9,12 @@
 A toolkit of useful React hooks.
 
 # Hooks
+- [`useFetch(url, fetchOptions)`](#usefetchurl-fetchoptions)
+- [`useDelayedCallback(cb, opts)`](#usedelayedcallbackcb-opts)
+- [`useInterval(callback, delay)`](#useintervalcallback-delay)
+- [`useMeasuredCallback(callback, deps, onMeasure?)`](#usemeasuredcallbackcallback-deps-onmeasure)
+- [`useMount(effect)`](#usemounteffect)
+- [`useDidMount()`](#usedidmount)
 
 ## `useFetch(url, fetchOptions)`
 
@@ -32,9 +38,9 @@ checking `status` you can create lazy-loaded components.
 This example creates a TODO list from data retrieved from your API. JSON data
 in the response body will be parsed into an object.
 
-```ts
+```tsx
 import { FC, useEffect } from 'react'
-import useFetch, { RequestState, RequestStatus } from 'react-hooks/useFetch'
+import useFetch, { RequestState, RequestStatus } from '@donisaac/react-hooks'
 
 type TodoTasks = string[]
 
@@ -73,7 +79,7 @@ response bodies contain images, they are parsed into
 
 ```tsx
 import { FC, useState, useEffect } from 'react'
-import useFetch, { RequestState, RequestStatus } from 'react-hooks/useFetch'
+import useFetch, { RequestState, RequestStatus } from '@donisaac/react-hooks'
 
 import defaultProfilePicture from './img/default-profile.png'
 
@@ -179,7 +185,7 @@ to repeatedly call `callback` every `delay` milliseconds.
 
 ```tsx
 import { FC, useState, useEffect } from 'react'
-import useInterval from 'react-hooks/useInterval'
+import useInterval from '@donisaac/react-hooks'
 
 export const Timer: FC = () => {
     const [date, setDate] = useState(new Date())
@@ -212,7 +218,7 @@ Performance Timeline. This lets you monitor time-consuming operations.
 
 ```tsx
 import { FC, useCallback, useEffect } from 'react'
-import useMeasuredCallback from 'react-hooks/useMeasuredCallback'
+import useMeasuredCallback from '@donisaac/react-hooks'
 import intensiveTask from './intensiveTask'
 
 export const MyComponent: FC<{ logger?: typeof Console }> = ({
@@ -252,7 +258,7 @@ and has been mounted to the DOM. You can think of this as the hook version of
 
 ```tsx
 import { FC } from 'react'
-import useMount from 'react-hooks/useMount'
+import useMount from '@donisaac/react-hooks'
 
 export const MyComponent: FC = () => {
     useMount(() => {
@@ -275,7 +281,7 @@ Similar to `useMount()`, except it returns a boolean that is set to true when th
 
 ```tsx
 import { FC } from 'react'
-import useDidMount from 'react-hooks/useDidMount'
+import useDidMount from '@donisaac/react-hooks'
 
 export const MyComponent: FC = () => {
     const isMounted = useDidMount()

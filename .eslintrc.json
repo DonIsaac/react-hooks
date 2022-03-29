@@ -30,6 +30,11 @@
         "@typescript-eslint",
         "prettier"
     ],
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
+    },
     "rules": {
         // "indent": [
         //     "error",
@@ -48,5 +53,16 @@
             "error",
             "never"
         ]
-    }
+    },
+    "overrides": [
+        // Loosen rules for spec files
+        {
+            "files": [
+                "**/*.spec.ts"
+            ],
+            "rules": {
+                "@typescript-eslint/no-explicit-any": "off"
+            }
+        }
+    ]
 }
