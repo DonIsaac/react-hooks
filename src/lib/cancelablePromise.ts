@@ -10,8 +10,8 @@ export type CancelablePromisify<T extends (...args: any[]) => any> = T extends (
 // export type CancelablePromise<T> = Promise<T> & { cancel: () => void }
 
 export type Executor<T> = (
-    resolve: (value?: T | PromiseLike<T>) => void,
-    reject: (reason?: any) => void
+    resolve: (value: T | PromiseLike<T>) => void,
+    reject: (reason?: unknown) => void
 ) => void
 
 export class CancelablePromise<T> extends Promise<T> {

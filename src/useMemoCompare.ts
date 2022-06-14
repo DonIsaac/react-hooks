@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useRef } from 'react'
 import deepEqual from './lib/deepEqual'
 
 export type Compare<T> = (a: T, b: T) => boolean

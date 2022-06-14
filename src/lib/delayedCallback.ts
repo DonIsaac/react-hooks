@@ -1,6 +1,6 @@
 /* eslint-disable no-inner-declarations */
 // !!! THIS FILE IS PROBABLY DEPRECATED !!!
-import { CancelablePromise, CancelablePromisify } from './types'
+import { CancelablePromise, CancelablePromisify } from './cancelablePromise'
 
 export interface DelayedCallbackOptions {
     strategy?: 'idle' | 'animation'
