@@ -1,5 +1,8 @@
+import type React from 'react'
 import { useState, useEffect, useCallback } from 'react'
 import useMemoCompare from './useMemoCompare'
+
+type EffectCallback = React.EffectCallback
 
 /**
  * Checks if the user has granted access to a specific permission. This
@@ -45,7 +48,7 @@ export default function usePermissions(permission: PermissionName): boolean {
     }, [permission])
 
     const memoStatus = useMemoCompare(status)
-    useEffect(() => {
+    useEffect((): ReturnType<EffectCallback> => {
         if (memoStatus) {
             memoStatus.addEventListener('change', updatePermission)
             return () =>
