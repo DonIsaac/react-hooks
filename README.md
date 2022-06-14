@@ -2,7 +2,10 @@
 
 <center>
 
-[![Gated CI](https://github.com/DonIsaac/react-hooks/actions/workflows/gated.yml/badge.svg)](https://github.com/DonIsaac/react-hooks/actions/workflows/gated.yml)
+[![Gated
+CI](https://github.com/DonIsaac/react-hooks/actions/workflows/gated.yml/badge.svg)](https://github.com/DonIsaac/react-hooks/actions/workflows/gated.yml)
+[![Maintainability](https://api.codeclimate.com/v1/badges/b6ed3aa3919453639f7a/maintainability)](https://codeclimate.com/github/DonIsaac/react-hooks/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/b6ed3aa3919453639f7a/test_coverage)](https://codeclimate.com/github/DonIsaac/react-hooks/test_coverage)
 
 </center>
 
