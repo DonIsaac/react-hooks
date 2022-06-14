@@ -140,7 +140,10 @@ describe('useDelayedCallback', () => {
 
             it('when canceled, the delayed callback does not reject and does not invoke the underlying callback', () => {
                 const result = delayedCb()
-                result.catch(err => fail(`should not reject: ${err}`))
+                // result.catch(err => fail(`should not reject: ${err}`))
+                result.catch(err => {
+                    throw new Error(`should not reject: ${err}`)
+                })
                 result.cancel()
                 testCase.run()
                 expect(cbThrows).not.toBeCalled()
@@ -234,27 +237,22 @@ describe('useDelayedCallback', () => {
                 delayedCb = undefined as any
             })
 
-            it('the delayed function rejects with the error', async () => {
+            it('the delayed function rejects with the error', () => {
                 testCase.run()
                 const res = delayedCb()
                 testCase.run()
 
-                try {
-                    const awaitedRes = await res
-                    fail(`res should have thrown, got ${awaitedRes}`)
-                } catch (err) {
-                    expect(err).toBe(error)
-                }
+                return expect(res).rejects.toThrow(error)
             })
 
             it('when canceled, does not reject nor invoke the underlying callback', () => {
                 testCase.run()
                 const res = delayedCb()
-                res.catch(err =>
-                    fail(
+                res.catch(err => {
+                    throw new Error(
                         `Canceled promise should not have rejected, got ${err}`
                     )
-                )
+                })
                 res.cancel()
                 testCase.run()
 

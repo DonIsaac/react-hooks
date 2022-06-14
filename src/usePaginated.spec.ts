@@ -1,3 +1,4 @@
+/// <reference types="jest-fetch-mock" />
 import { renderHook, RenderHookResult, act } from '@testing-library/react-hooks'
 import usePaginated, { PaginatedRequest } from './usePaginated'
 

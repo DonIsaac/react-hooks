@@ -8,6 +8,7 @@
         "plugin:react/recommended",
         "plugin:react-hooks/recommended",
         "plugin:@typescript-eslint/recommended",
+        "prettier",
         "plugin:prettier/recommended"
     ],
     "parser": "@typescript-eslint/parser",
@@ -36,29 +37,39 @@
         }
     },
     "rules": {
+        "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
+        "@typescript-eslint/no-shadow": "warn"
         // "indent": [
         //     "error",
         //     4
         // ],
-        "indent": "off",
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
-        "quotes": [
-            "error",
-            "single"
-        ],
-        "semi": [
-            "error",
-            "never"
-        ]
+        // "indent": "off",
+        // "quotes": "off",
+        // "semi": "off",
+        // "linebreak-style": [
+        //     "error",
+        //     "unix"
+        // ],
+        // "quotes": [
+        //     "error",
+        //     "single"
+        // ],
+        // "semi": [
+        //     "error",
+        //     "never"
+        // ]
     },
     "overrides": [
         // Loosen rules for spec files
         {
             "files": [
-                "**/*.spec.ts"
+                "**/*.spec.ts",
+                "**/*.spec.tsx",
+                "test/**"
+            ],
+            "plugins": ["jest"],
+            "extends": [
+                "plugin:jest/recommended"
             ],
             "rules": {
                 "@typescript-eslint/no-explicit-any": "off"
