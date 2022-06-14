@@ -34,7 +34,7 @@ jobs:
           cache: yarn
 
       - name: Install dependencies
-        run: yarn --immutable
+        run: yarn --immutable --check-cache
 
       - name: Build
         run: yarn build
@@ -53,7 +53,7 @@ jobs:
           cache: yarn
 
       - name: Install dependencies
-        run: yarn --immutable
+        run: yarn --immutable --check-cache
 
       - name: Lint
         run: yarn lint
@@ -80,7 +80,7 @@ jobs:
           cache: yarn
 
       - name: Install dependencies
-        run: yarn --immutable
+        run: yarn --immutable --check-cache
 
       # - name: Test
       #   run: yarn test --coverage
@@ -91,7 +91,7 @@ jobs:
           CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_COVERAGE_TOKEN }}
         with:
           debug: true
-          coverageCommand: yarn test --coverage
+          coverageCommand: yarn test
 
 
 
