@@ -6,4 +6,4 @@ fetch.dontMock()
 
 // fetchMock.dontMock()
 
-jest.setTimeout(1000)
+jest.setTimeout(5000)

@@ -58,6 +58,7 @@ export default function useFetch<T = any, E = Error>(
                     const errPayload: Record<string, unknown> = await parseBody(
                         res
                     )
+                    delete errPayload['__proto__']
                     const err = new Error(`${res.status}: ${res.statusText}`)
                     Object.assign(err, errPayload)
                     throw err
