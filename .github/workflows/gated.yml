@@ -86,7 +86,7 @@ jobs:
       #   run: yarn test --coverage
 
       - name: Test & Coverage
-        uses: paambaati/codeclimate-action@v2.2.4
+        uses: paambaati/codeclimate-action@v3.0.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_COVERAGE_TOKEN }}
         with:
