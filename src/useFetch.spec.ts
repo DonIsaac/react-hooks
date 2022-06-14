@@ -127,6 +127,7 @@ describe('When fetch returns an image', () => {
     let actual: RequestState<any>
 
     beforeEach(async () => {
+        jest.setTimeout(10000)
         fetchMock.dontMock()
         result = renderHook(() => useFetch('https://picsum.photos/200/300'))
         await result.waitForNextUpdate()
@@ -259,7 +260,7 @@ describe('when fetch rejects and the error attempts to perform prototype polluti
         expect(result.result.current.error).toEqual(error)
     })
 
-    xit('should not pollute the prototype', () => {
+    it.skip('should not pollute the prototype', () => {
         // @ts-expect-error foo should not be defined
         expect(result.result.current.error.foo).toBeUndefined()
     })
