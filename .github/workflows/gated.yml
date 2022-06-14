@@ -90,7 +90,7 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_COVERAGE_TOKEN }}
         with:
-          debug: true
+          # debug: true
           coverageCommand: yarn test
 
 
