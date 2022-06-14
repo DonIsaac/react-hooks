@@ -1,17 +1,21 @@
 name: Gated CI
 on:
+
   push:
     branches:
       - main
     paths-ignore:
       - '**.md'
       - '**/.gitignore'
+      - '**/LICENSE'
+
   pull_request:
     branches:
       - main
     paths-ignore:
       - '**.md'
       - '**/.gitignore'
+      - '**/LICENSE'
 
 
 jobs:
@@ -30,7 +34,7 @@ jobs:
           cache: yarn
 
       - name: Install dependencies
-        run: yarn --frozen-lockfile
+        run: yarn --immutable
 
       - name: Build
         run: yarn build
@@ -49,7 +53,7 @@ jobs:
           cache: yarn
 
       - name: Install dependencies
-        run: yarn --frozen-lockfile
+        run: yarn --immutable
 
       - name: Lint
         run: yarn lint
@@ -58,7 +62,7 @@ jobs:
         run: yarn tc
 
   test:
-    name: Lint and Test
+    name: Test
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -76,8 +80,18 @@ jobs:
           cache: yarn
 
       - name: Install dependencies
-        run: yarn --frozen-lockfile
+        run: yarn --immutable
 
-      - name: Test
-        run: yarn test --coverage
+      # - name: Test
+      #   run: yarn test --coverage
+
+      - name: Test & Coverage
+        uses: paambaati/codeclimate-action@v3.0.0
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_COVERAGE_TOKEN }}
+        with:
+          debug: true
+          coverageCommand: yarn test --coverage
+
+
 
