@@ -18,6 +18,7 @@ A toolkit of useful React hooks.
 - [`useMeasuredCallback(callback, deps, onMeasure?)`](#usemeasuredcallbackcallback-deps-onmeasure)
 - [`useMount(effect)`](#usemounteffect)
 - [`useDidMount()`](#usedidmount)
+- [`useForceUpdate()`](#useforceupdate)
 
 ## `useFetch(url, fetchOptions)`
 
@@ -290,6 +291,40 @@ export const MyComponent: FC = () => {
     const isMounted = useDidMount()
     return (
         <span>MyComponent {isMounted ? 'is' : 'is not'} mounted to the DOM</span>
+    )
+}
+```
+
+----
+
+## `useForceUpdate()`
+
+Allows you to force a component to rerender whether or not React has detected a
+state change. The function returned by this hook will cause the rerender when
+called.
+
+### Example
+
+```tsx
+import { FC, useRef, useEffect } from 'react
+import { useForceUpdate } from '@donisaac/react-hooks'
+// Displays an update counter and a button to force an update. This is 
+// not exactly best practice, but it is a good example of how to use
+// this hook.
+const TestComponent: FC = () => {
+    const forceUpdate = useForceUpdate()
+    const updateCount = useRef(0)
+    // Increment the update counter on each rerender
+    useEffect(() => {
+       updateCount.current++
+    })
+    return (
+        <div>
+            <span data-testid="update-count" id="update-count">
+                {updateCount.current}
+            </span>
+            <button onClick={forceUpdate}>Force Update</button>
+        </div>
     )
 }
 ```
