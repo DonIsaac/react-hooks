@@ -12,7 +12,7 @@ const MAX_STATE_VALUE = 100
  * import { FC, useRef, useEffect } from 'react
  * import { useForceUpdate } from '@donisaac/react-hooks'
  *
- * // Displays an update counter and a button to force an update. This is 
+ * // Displays an update counter and a button to force an update. This is
  * // not exactly best practice, but it is a good example of how to use
  * // this hook.
  * const TestComponent: FC = () => {

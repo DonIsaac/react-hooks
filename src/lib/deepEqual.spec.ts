@@ -50,6 +50,10 @@ describe('deepEqual(a, b)', () => {
         [1, 'hi'],
         [{ a: 1 }, { a: 2 }],
         [{ a: 1 }, { b: 1 }],
+        [
+            { a: 1, b: { c: { d: 'hello' } } },
+            { a: 1, b: { c: { d: 'world' } } },
+        ],
         ['hi', 'hello'],
         ['hi', 'Hi'],
     ])('deepEqual(%p, %p) === false', (a, b) => {
