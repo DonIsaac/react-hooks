@@ -13,6 +13,9 @@ dist
 
 # Temporary files
 *.log
+log/
+tmp/
+*.tmp
 
 # NPM Package
 *.tgz
