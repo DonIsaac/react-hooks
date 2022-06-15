@@ -14,6 +14,9 @@ dist
 # Temporary files
 *.log
 
+# NPM Package
+*.tgz
+
 # yarn w/o zero-installs
 .yarn/*
 !.yarn/patches
