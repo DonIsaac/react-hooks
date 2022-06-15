@@ -18,14 +18,17 @@ describe('deepEqual(a, b)', () => {
             [1, 2, 3],
         ],
         [{ a: 1 }, { a: 1 }],
+        [{}, {}],
     ])('deepEqual(%p, %p) === true', (a, b) => {
         expect(deepEqual(a, b)).toBe(true)
+        expect(deepEqual(b, a)).toBe(true)
     })
 
     it.each([
         [1, 2],
         [null, undefined],
         [undefined, null],
+        [{}, null],
         [false, true],
         [true, false],
         [Symbol.for('foo'), Symbol.for('bar')],
@@ -39,6 +42,11 @@ describe('deepEqual(a, b)', () => {
             [1, 2, 3],
             ['1', '2', '3'],
         ],
+        [[], { a: 1 }],
+        [
+            [1, 2, 3],
+            [1, 2, 3, 4],
+        ],
         [1, 'hi'],
         [{ a: 1 }, { a: 2 }],
         [{ a: 1 }, { b: 1 }],
@@ -46,6 +54,7 @@ describe('deepEqual(a, b)', () => {
         ['hi', 'Hi'],
     ])('deepEqual(%p, %p) === false', (a, b) => {
         expect(deepEqual(a, b)).toBe(false)
+        expect(deepEqual(b, a)).toBe(false)
     })
 
     it('correctly handles deeply equal objects', () => {
