@@ -20,7 +20,7 @@ export default function deepEqual(a: unknown, b: unknown): boolean {
         if (typeof b !== 'object') return false
         // If a is nullish but a and b didn't pass the Object.is()
         // check, that means a is null and b is undefined or vice versa
-        if (a == null) return false
+        if (a == null || b == null) return false
         const aKeys = Object.keys(a).sort()
         const bKeys = Object.keys(b as object).sort()
         if (aKeys.length !== bKeys.length) return false

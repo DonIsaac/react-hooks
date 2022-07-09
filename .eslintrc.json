@@ -38,7 +38,10 @@
     },
     "rules": {
         "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
-        "@typescript-eslint/no-shadow": "warn"
+        "@typescript-eslint/no-shadow": "warn",
+        "react-hooks/exhaustive-deps": ["warn", {
+            "additionalHooks": "(useMeasuredCallback)"
+        }]
         // "indent": [
         //     "error",
         //     4
