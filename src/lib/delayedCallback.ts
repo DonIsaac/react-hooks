@@ -17,7 +17,7 @@ export interface DelayedCallbackOptions {
 //     opts: DelayedCallbackOptions = {}
 // ): CancelablePromisify<T> {
 //     const { strategy = 'idle' } = opts
-// 
+//
 //     const [requestDelayedCallback, cancelDelayedCallback] = {
 //         idle: [requestIdleCallback, cancelIdleCallback],
 //         animation: [requestAnimationFrame, cancelAnimationFrame],
@@ -25,10 +25,10 @@ export interface DelayedCallbackOptions {
 //         (callback: () => void, opts?: Record<string, any>) => number,
 //         (handle: number) => void
 //     ]
-// 
+//
 //     const delayedCallback = function delayedCallback(...args: any[]) {
 //         let idleState: number | undefined
-// 
+//
 //         const promise = new Promise<ReturnType<T>>((resolve, reject) => {
 //             idleState = requestDelayedCallback(
 //                 () => {
@@ -41,12 +41,12 @@ export interface DelayedCallbackOptions {
 //                 { timeout: opts.delayTimeout ?? 0 }
 //             )
 //         })
-// 
+//
 //         ;(promise as CancelablePromise<ReturnType<T>>).cancel = () =>
 //             idleState && cancelDelayedCallback(idleState)
-// 
+//
 //         return promise as CancelablePromise<ReturnType<T>>
 //     }
-// 
+//
 //     return delayedCallback as CancelablePromisify<T>
 // }
