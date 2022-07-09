@@ -13,6 +13,7 @@ A toolkit of useful React hooks.
 
 # Hooks
 - [`useFetch(url, fetchOptions)`](#usefetchurl-fetchoptions)
+- [`useMemoCompare(curr, compare)`](#usememocomparecurr-compare)
 - [`useDelayedCallback(cb, opts)`](#usedelayedcallbackcb-opts)
 - [`useInterval(callback, delay)`](#useintervalcallback-delay)
 - [`useMeasuredCallback(callback, deps, onMeasure?)`](#usemeasuredcallbackcallback-deps-onmeasure)
