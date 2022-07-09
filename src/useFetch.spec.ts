@@ -2,6 +2,7 @@ import {
     renderHook,
     RenderHookResult,
     RenderResult,
+    WaitForNextUpdateOptions,
 } from '@testing-library/react-hooks'
 import { SynchronousPromise } from 'synchronous-promise'
 import { MockResponseInit } from 'jest-fetch-mock'
@@ -9,6 +10,9 @@ import useFetch from './useFetch'
 import { RequestState } from './types'
 
 describe('useFetch', () => {
+    const waitOptions: WaitForNextUpdateOptions = {
+        timeout: 5000,
+    }
     let result: RenderHookResult<unknown, RequestState<any>>
 
     beforeAll(() => {
@@ -30,7 +34,7 @@ describe('useFetch', () => {
                 result = renderHook(() =>
                     useFetch('https://jsonplaceholder.typicode.com/todos/1')
                 )
-                await result.waitForNextUpdate()
+                await result.waitForNextUpdate(waitOptions)
             })
 
             it('should parse and return the expected result', async () => {
@@ -72,7 +76,7 @@ describe('useFetch', () => {
                     })
                 )
                 result = renderHook(() => useFetch('https://example.com'))
-                await result.waitForNextUpdate()
+                await result.waitForNextUpdate(waitOptions)
             })
 
             it('should set the status to "success"', () => {
@@ -117,7 +121,7 @@ describe('useFetch', () => {
             )
 
             result = renderHook(() => useFetch('https://example.com'))
-            await result.waitForNextUpdate()
+            await result.waitForNextUpdate(waitOptions)
         })
 
         it('should return the response body as text', async () => {
@@ -136,7 +140,7 @@ describe('useFetch', () => {
         beforeEach(async () => {
             fetchMock.dontMock()
             result = renderHook(() => useFetch('https://picsum.photos/200/300'))
-            await result.waitForNextUpdate()
+            await result.waitForNextUpdate(waitOptions)
             actual = result.result.current
         })
 
@@ -189,7 +193,7 @@ describe('useFetch', () => {
         describe('when the response then resolves', () => {
             beforeEach(async () => {
                 promise.resume()
-                await result.waitForNextUpdate()
+                await result.waitForNextUpdate(waitOptions)
             })
 
             it('should set status to "success"', () => {
@@ -215,7 +219,7 @@ describe('useFetch', () => {
             fetchMock.mockReject(makeError)
 
             result = renderHook(() => useFetch('https://example.com'))
-            await result.waitForNextUpdate()
+            await result.waitForNextUpdate(waitOptions)
         })
 
         it('should set error to the thrown error', async () => {
@@ -258,7 +262,7 @@ describe('useFetch', () => {
                 result = renderHook(() =>
                     useFetch<any, ExtraContextError>('https://example.com')
                 )
-                await result.waitForNextUpdate()
+                await result.waitForNextUpdate(waitOptions)
                 actual = result.result as RenderResult<
                     RequestState<any, ExtraContextError>
                 >
