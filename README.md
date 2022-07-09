@@ -122,6 +122,56 @@ const ProfilePicture: FC<{ username: string }> = ({ username }) => {
 
 ----
 
+## `useMemoCompare(curr, compare)`
+
+
+Similar to [useMemo](https://reactjs.org/docs/hooks-reference.html#useMemo),
+this hook memoizes an object by comparing it with a comparison function. This
+hook doesn't aim to avoid expensive computation, rather it aims to provide a
+stable value for a deeply nested object so that it can be used within a
+dependency array.
+ 
+Comparison functions take two parameters of the same type and return `true`
+if they are the same and `false` if they are not. If a comparison function
+is not provided, it defaults to a limited deep equality check.
+
+This hook was inspired by useHook's
+[useMemoCompare][https://usehooks.com/useMemoCompare], but the implementation
+is different.
+ 
+### Example
+
+```tsx
+import { FC, useEffect } from 'react'
+import { useMemoCompare } from '@donisaac/react-hooks'
+import { makeApiCall, ApiCallPayload, ApiResult, arePayloadsEqual } from './api'
+
+export type ConnectedComponentProps = {
+    // Some deeply nested object to send to your API
+    payload: APICallPayload
+}
+
+export const ConnectedComponent: FC<ConnectedComponentProps> = props => {
+    const [apiResult, setApiResult = useState<ApiResult>()
+
+    // Comparison function has type <T>(a: T, b: T) => boolean
+    const payload = useMemoCompare(props.payload, arePayloadsEqual)
+
+    // because `payload` is memoized, it is safe to use in a dependency array.
+    // This useEffect will only be re-executed when `payload` is structurally
+    // different.
+    useEffect(() => {
+        makeApiCall(payload).then(res => setApiResult(res))
+    }, [payload])
+
+    return apiResult
+        ? <div>Loading...</div>
+        : <div>Got result from API: {JSON.stringify(apiResult)}</div>
+}
+```
+
+----
+
 ## `useDelayedCallback(cb, opts)`
 
 Similar to
