@@ -53,27 +53,12 @@ export default function useMeasuredCallback<T extends (...args: any[]) => any>(
     deps: DependencyList,
     onMeasure?: (measure: PerformanceMeasure) => void
 ) {
-    const measuredCallback: T = useCallback(
+    const measuredCallback: T = useCallback<T>(
         function measuredCallback(...args) {
             const startName = `${callback.name}-start`
             const endName = `${callback.name}-end`
 
-            performance.mark(startName)
-            const res = callback(...args)
-
-            if (res instanceof Promise) {
-                return res.then(resolved => {
-                    performance.mark(endName)
-                    const measure = performance.measure(
-                        callback.name,
-                        startName,
-                        endName
-                    )
-                    onMeasure?.(measure)
-
-                    return resolved
-                })
-            } else {
+            const endMeasure = <U>(value: U) => {
                 performance.mark(endName)
                 const measure = performance.measure(
                     callback.name,
@@ -81,7 +66,16 @@ export default function useMeasuredCallback<T extends (...args: any[]) => any>(
                     endName
                 )
                 onMeasure?.(measure)
-                return res
+                return value
+            }
+
+            performance.mark(startName)
+            const res = callback(...args)
+
+            if (res instanceof Promise) {
+                return res.then(endMeasure)
+            } else {
+                return endMeasure(res)
             }
         } as T,
         [...deps, onMeasure]
