@@ -41,4 +41,16 @@ describe('useInterval(cb, delay)', () => {
         clock.tick(500)
         expect(cb).toHaveBeenCalledTimes(3)
     })
+
+    it('does not call the callback after unmount', () => {
+        const cb = jest.fn()
+        const { unmount, rerender } = renderHook(() => useInterval(cb, 1000))
+
+        rerender()
+        expect(cb).not.toHaveBeenCalled()
+
+        unmount()
+        clock.tick(2000)
+        expect(cb).not.toHaveBeenCalled()
+    })
 })

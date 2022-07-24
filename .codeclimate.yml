@@ -7,3 +7,12 @@ plugins:
       extensions:
         - '.ts'
         - '.tsx'
+
+exclude_patterns:
+  - '**/node_modules/**'
+  - '**/test/**'
+  - '**/*.spec.ts'
+  - '**/*.test.ts'
+  - '**/*.spec.tsx'
+  - '**/*.test.tsx'
+  - '**/*.d.ts'
