@@ -1,4 +1,66 @@
-import deepEqual from './deepEqual'
+import { refEqual, shallowEqual, deepEqual } from './compare'
+
+describe('refEqual(a, b)', () => {
+    it.each([
+        [1, 1, true],
+        [1, 2, false],
+        [true, true, true],
+        [true, false, false],
+        [null, null, true],
+        [null, undefined, false],
+        [undefined, undefined, true],
+        [undefined, null, false],
+        ['foo', 'foo', true],
+        ['foo', 'bar', false],
+        [Symbol.for('foo'), Symbol.for('foo'), true],
+        [Symbol('foo'), Symbol('foo'), false],
+    ] as [unknown, unknown, boolean][])(
+        'refEqual(%p, %p) === %p',
+        (a, b, expected) => {
+            expect(refEqual(a, b)).toBe(expected)
+        }
+    )
+
+    it('should return true for objects with the same reference', () => {
+        const obj = { foo: 'bar' }
+        expect(refEqual(obj, obj)).toBe(true)
+    })
+
+    it('should return false for objects with different references', () => {
+        const obj = { foo: 'bar' }
+        const obj2 = { foo: 'bar' }
+        expect(refEqual(obj, obj2)).toBe(false)
+    })
+})
+
+describe('shallowEqual(a, b)', () => {
+    it.each([
+        [1, 1, true],
+        [1, 2, false],
+        [true, true, true],
+        [true, false, false],
+        [null, null, true],
+        [null, undefined, false],
+        [undefined, undefined, true],
+        [undefined, null, false],
+        ['foo', 'foo', true],
+        ['foo', 'bar', false],
+        [Symbol.for('foo'), Symbol.for('foo'), true],
+        [Symbol('foo'), Symbol('foo'), false],
+        [[1, 2, 3], [1, 2, 3], true],
+        [[1, 2, 3], [1, 2, 4], false],
+        [[1, 2, 3], [1, 2, 3, 4], false],
+        [{}, {}, true],
+        [{ foo: 'bar' }, { foo: 'bar' }, true],
+        [{ foo: 'bar' }, { foo: 'baz' }, false],
+        [{ foo: 'bar' }, { foo: 'bar', baz: 'baz' }, false],
+    ] as [unknown, unknown, boolean][])(
+        'shallowEqual(%p, %p) === %p',
+        (a, b, expected) => {
+            expect(shallowEqual(a, b)).toBe(expected)
+        }
+    )
+})
 
 describe('deepEqual(a, b)', () => {
     it.each([

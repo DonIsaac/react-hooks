@@ -1,5 +1,6 @@
 import { renderHook, RenderHookResult } from '@testing-library/react-hooks'
-import useMemoCompare, { Compare } from './useMemoCompare'
+import useMemoCompare from './useMemoCompare'
+import type { Compare } from './lib/compare'
 
 describe('useMemoCompare(curr, compare) simple usage', () => {
     type Test = { a: string }
