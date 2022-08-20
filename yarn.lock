@@ -584,6 +584,7 @@ __metadata:
     eslint-plugin-prettier: ^4.2.1
     eslint-plugin-react: ^7.30.1
     eslint-plugin-react-hooks: ^4.6.0
+    eslint-plugin-tsdoc: ^0.2.16
     jest: ^28.1.2
     jest-environment-jsdom: ^28.1.2
     jest-fetch-mock: ^3.0.3
@@ -964,6 +965,25 @@ __metadata:
     "@jridgewell/resolve-uri": ^3.0.3
     "@jridgewell/sourcemap-codec": ^1.4.10
   checksum: e38254e830472248ca10a6ed1ae75af5e8514f0680245a5e7b53bc3c030fd8691d4d3115d80595b45d3badead68269769ed47ecbbdd67db1343a11f05700e75a
+  languageName: node
+  linkType: hard
+
+"@microsoft/tsdoc-config@npm:0.16.1":
+  version: 0.16.1
+  resolution: "@microsoft/tsdoc-config@npm:0.16.1"
+  dependencies:
+    "@microsoft/tsdoc": 0.14.1
+    ajv: ~6.12.6
+    jju: ~1.4.0
+    resolve: ~1.19.0
+  checksum: 2b2121803caf6584fe0264ad16f8fa10de68438c0b82bd25f918606052af5312050f38b6abd4bcf3d40f120713aab144762a7a280fa22dd12e5571cd08e348e1
+  languageName: node
+  linkType: hard
+
+"@microsoft/tsdoc@npm:0.14.1":
+  version: 0.14.1
+  resolution: "@microsoft/tsdoc@npm:0.14.1"
+  checksum: e4ad038ccff2cd96e0d53ee42e2136f0f5a925b16cfda14261f1c2eb55ba0088a0e3b08ff819b476ddc69b2242a391925fab7f6ae2afabb19b96f87e19c114fc
   languageName: node
   linkType: hard
 
@@ -1688,7 +1708,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv@npm:^6.10.0, ajv@npm:^6.12.4":
+"ajv@npm:^6.10.0, ajv@npm:^6.12.4, ajv@npm:~6.12.6":
   version: 6.12.6
   resolution: "ajv@npm:6.12.6"
   dependencies:
@@ -2757,6 +2777,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-tsdoc@npm:^0.2.16":
+  version: 0.2.16
+  resolution: "eslint-plugin-tsdoc@npm:0.2.16"
+  dependencies:
+    "@microsoft/tsdoc": 0.14.1
+    "@microsoft/tsdoc-config": 0.16.1
+  checksum: 37ca88b060b90223aa938656d267eead4291d5859e790f95eb8271eb8f315c16010e500fac4ef535710350e36d7394cecb7e61fbb3635568066008e3425dcac7
+  languageName: node
+  linkType: hard
+
 "eslint-scope@npm:^5.1.1":
   version: 5.1.1
   resolution: "eslint-scope@npm:5.1.1"
@@ -3558,6 +3588,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"is-core-module@npm:^2.1.0":
+  version: 2.10.0
+  resolution: "is-core-module@npm:2.10.0"
+  dependencies:
+    has: ^1.0.3
+  checksum: 0f3f77811f430af3256fa7bbc806f9639534b140f8ee69476f632c3e1eb4e28a38be0b9d1b8ecf596179c841b53576129279df95e7051d694dac4ceb6f967593
+  languageName: node
+  linkType: hard
+
 "is-core-module@npm:^2.2.0, is-core-module@npm:^2.8.1":
   version: 2.8.1
   resolution: "is-core-module@npm:2.8.1"
@@ -4231,6 +4270,13 @@ __metadata:
   bin:
     jest: bin/jest.js
   checksum: 8ad37088c42cd5a6decb54c61dfe6a45131a50dfe4c805aef1228cae4ca91b0fc7dfe2991ea771d88118151f5f1697d113b6f45c9b0d88b2ece2aac229e77150
+  languageName: node
+  linkType: hard
+
+"jju@npm:~1.4.0":
+  version: 1.4.0
+  resolution: "jju@npm:1.4.0"
+  checksum: 3790481bd2b7827dd6336e6e3dc2dcc6d425679ba7ebde7b679f61dceb4457ea0cda330972494de608571f4973c6dfb5f70fab6f3c5037dbab19ac449a60424f
   languageName: node
   linkType: hard
 
@@ -5428,6 +5474,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"resolve@npm:~1.19.0":
+  version: 1.19.0
+  resolution: "resolve@npm:1.19.0"
+  dependencies:
+    is-core-module: ^2.1.0
+    path-parse: ^1.0.6
+  checksum: a05b356e47b85ad3613d9e2a39a824f3c27f4fcad9c9ff6c7cc71a2e314c5904a90ab37481ad0069d03cab9eaaac6eb68aca1bc3355fdb05f1045cd50e2aacea
+  languageName: node
+  linkType: hard
+
 "resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>":
   version: 1.22.0
   resolution: "resolve@patch:resolve@npm%3A1.22.0#~builtin<compat/resolve>::version=1.22.0&hash=07638b"
@@ -5448,6 +5504,16 @@ __metadata:
     is-core-module: ^2.2.0
     path-parse: ^1.0.6
   checksum: 21684b4d99a4877337cdbd5484311c811b3e8910edb5d868eec85c6e6550b0f570d911f9a384f9e176172d6713f2715bd0b0887fa512cb8c6aeece018de6a9f8
+  languageName: node
+  linkType: hard
+
+"resolve@patch:resolve@~1.19.0#~builtin<compat/resolve>":
+  version: 1.19.0
+  resolution: "resolve@patch:resolve@npm%3A1.19.0#~builtin<compat/resolve>::version=1.19.0&hash=07638b"
+  dependencies:
+    is-core-module: ^2.1.0
+    path-parse: ^1.0.6
+  checksum: 2443b94d347e6946c87c85faf13071f605e609e0b54784829b0ed2b917d050bfc1cbaf4ecc6453f224cfa7d0c5dcd97cbb273454cd210bee68e4af15c1a5abc9
   languageName: node
   linkType: hard
 

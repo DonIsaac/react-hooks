@@ -29,6 +29,7 @@
         "react",
         "react-hooks",
         "@typescript-eslint",
+        "tsdoc",
         "prettier"
     ],
     "settings": {
@@ -41,7 +42,8 @@
         "@typescript-eslint/no-shadow": "warn",
         "react-hooks/exhaustive-deps": ["warn", {
             "additionalHooks": "(useMeasuredCallback)"
-        }]
+        }],
+        "tsdoc/syntax": "warn"
         // "indent": [
         //     "error",
         //     4
