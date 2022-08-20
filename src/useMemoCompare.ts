@@ -1,7 +1,5 @@
 import { useRef } from 'react'
-import deepEqual from './lib/deepEqual'
-
-export type Compare<T> = (a: T, b: T) => boolean
+import { deepEqual, Compare } from './lib/compare'
 
 /**
  * Similar to [useMemo], this hook memoizes an object by comparing it
