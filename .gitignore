@@ -7,6 +7,9 @@ coverage
 *.tsbuildinfo
 dist
 
+# Documentation
+docs/*
+
 # Editor files
 *.swp
 *.swo
