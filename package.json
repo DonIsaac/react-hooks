@@ -30,7 +30,8 @@
     "lint": "eslint src",
     "lint:fix": "yarn lint --fix",
     "tc": "tsc -p tsconfig.strict.json",
-    "clean": "rimraf .cache dist coverage *.tgz *.tsbuildinfo || true"
+    "clean": "rimraf .cache dist coverage *.tgz *.tsbuildinfo || true",
+    "publish:docs": "gh-pages --dir docs"
   },
   "devDependencies": {
     "@shopify/jest-dom-mocks": "^4.0.0",
@@ -51,6 +52,7 @@
     "eslint-plugin-react": "^7.30.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-tsdoc": "^0.2.16",
+    "gh-pages": "^4.0.0",
     "jest": "^28.1.2",
     "jest-environment-jsdom": "^28.1.2",
     "jest-fetch-mock": "^3.0.3",

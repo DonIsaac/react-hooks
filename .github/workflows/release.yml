@@ -22,10 +22,16 @@ jobs:
       - name: Install dependencies
         run: yarn --immutable --check-cache
 
-      - name: Build
+      - name: Build Source
         run: yarn build
 
-      - name: Publish
+      - name: Build Documentation
+        run: yarn build:docs
+
+      - name: Publish Documentation
+        run: yarn publish:docs
+
+      - name: Publish Package to NPM
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
