@@ -10,35 +10,56 @@ export type UseLocalStorage = {
     ]
 }
 
+/**
+ * @internal
+ *
+ * @param key
+ * @param initialState
+ * @returns
+ */
 const useClientLocalStorage: UseLocalStorage = (
     key,
     initialState = undefined
 ) => {
-    const [value, setValue] = useState(() => {
+    const [value, _setValue] = useState(() => {
+        if (initialState !== undefined) {
+            return typeof initialState === 'function'
+                ? initialState()
+                : initialState
+        }
+
         const storedEncodedValue = window.localStorage.getItem(key)
         if (storedEncodedValue) {
             try {
                 return JSON.parse(storedEncodedValue)
             } catch (e) {
                 // Should the error be logged here?
-                return typeof initialState === 'function'
-                    ? initialState()
-                    : initialState
+                return storedEncodedValue
             }
-        } else {
-            return typeof initialState === 'function'
-                ? initialState()
-                : initialState
         }
     })
 
     useEffect(() => {
-        return () => localStorage.setItem(key, JSON.stringify(value))
+        if (value === undefined) {
+            window.localStorage.removeItem(key)
+        } else {
+            window.localStorage.setItem(
+                key,
+                typeof value === 'string' ? value : JSON.stringify(value)
+            )
+        }
+        // return () => localStorage.setItem(key, JSON.stringify(value))
     }, [key, value])
 
-    return [value, setValue]
+    return [value, _setValue]
 }
 
+/**
+ * @internal
+ * @param _key
+ * @param initialState
+ * @returns
+ */
 const useServerLocalStorage: UseLocalStorage = (
     _key,
     initialState = undefined

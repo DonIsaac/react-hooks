@@ -6,9 +6,6 @@ import useMemoCompare from './useMemoCompare'
 /**
  * Sends a {@link fetch} request to a URL.
  *
- * @param to  The URL to send the request to.
- * @param opts Additional request options to pass to `fetch`.
- *
  * The request can be in one of three states: `pending`, `success`, and `error`.
  * The current state is made available from the `status` property on the
  * returned {@link RequestState} object.
@@ -23,6 +20,10 @@ import useMemoCompare from './useMemoCompare'
  * @template T The type of data received from the response payload.
  * @template E The type of error object received from the response payload.
  * Defaults to {@link Error}.
+ *
+ *
+ * @param to  The URL to send the request to.
+ * @param opts Additional request options to pass to `fetch`.
  *
  * @returns An object containing the request status, response data (on success),
  * and response error (on error).
