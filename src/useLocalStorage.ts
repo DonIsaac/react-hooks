@@ -7,6 +7,11 @@ export type UseLocalStorage = {
      * Similar to `useState`, but values are persisted in the browser's local
      * storage.
      *
+     * When state is updated using the returned setter, the new value is saved to
+     * local storage under the given `key`. Setting the value to `undefined` will
+     * remove it from local storage. Local storage updates are performed lazily to
+     * prevent blocking the main rendering thread.
+     *
      * During the initial render, if a value is stored in local storage under the
      * given key, that value will be used as the initial state. Otherwise, the
      * state will be undefined.
@@ -25,6 +30,11 @@ export type UseLocalStorage = {
     /**
      * Similar to `useState`, but values are persisted in the browser's local
      * storage.
+     *
+     * When state is updated using the returned setter, the new value is saved to
+     * local storage under the given `key`. Setting the value to `undefined` will
+     * remove it from local storage. Local storage updates are performed lazily to
+     * prevent blocking the main rendering thread.
      *
      * If provided, the initial state parameter will be used as the state's
      * starting value. Otherwise existing data persisted in local storage will
@@ -113,6 +123,11 @@ const useLocalStorage: UseLocalStorage = canUseDOM()
 /**
  * Similar to `useState`, but values are persisted in the browser's local
  * storage.
+ *
+ * When state is updated using the returned setter, the new value is saved to
+ * local storage under the given `key`. Setting the value to `undefined` will
+ * remove it from local storage. Local storage updates are performed lazily to
+ * prevent blocking the main rendering thread.
  *
  * If provided, the initial state parameter will be used as the state's
  * starting value. Otherwise existing data persisted in local storage will

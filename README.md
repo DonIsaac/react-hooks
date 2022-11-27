@@ -20,6 +20,7 @@ A toolkit of useful React hooks.
 - [`useMount(effect)`](#usemounteffect)
 - [`useDidMount()`](#usedidmount)
 - [`useForceUpdate()`](#useforceupdate)
+- [`useLocalStorage(key, initialValue?)`](#uselocalstoragekey-initialvalue)
 
 ## `useFetch(url, fetchOptions)`
 
@@ -379,3 +380,23 @@ const TestComponent: FC = () => {
     )
 }
 ```
+
+## `useLocalStorage(key, initialValue?)`
+
+
+Similar to [useState](https://reactjs.org/docs/hooks-state.html), but values are
+persisted in the browser's local storage.
+
+When state is updated using the returned setter, the new value is saved to
+local storage under the given `key`. Setting the value to `undefined` will
+remove it from local storage. Local storage updates are performed lazily to
+prevent blocking the main rendering thread.
+
+If provided, the `initialState` parameter will be used as the state's
+starting value. Otherwise existing data persisted in local storage will
+be used. If neither are available, the state will be `undefined`.
+
+@param key - The key to store values under in local storage.
+@param initialState - Either a value or a factory function to use as the
+state's initial value.
+
