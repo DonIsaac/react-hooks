@@ -5,8 +5,11 @@ import useMemoCompare from './useMemoCompare'
 type EffectCallback = React.EffectCallback
 
 /**
+ *
  * Checks if the user has granted access to a specific permission. This
  * hook will request the permission if it has not been granted yet.
+ *
+ * @experimental
  *
  * @param permission the permission to check
  * @returns a boolean indicating whether the user has granted the permission
