@@ -150,6 +150,25 @@ describe('useLocalStorage(key)', () => {
                         expect(localStorage.getItem(key)).toBe(value)
                     })
                 })
+
+                describe('when the state is set to undefined', () => {
+                    beforeEach(() => {
+                        const [, setValue] = current()
+
+                        act(() => {
+                            setValue(undefined)
+                        })
+                    })
+
+                    it('the state is updated to undefined', () => {
+                        const [currentValue] = current()
+                        expect(currentValue).toBeUndefined()
+                    })
+
+                    it('the value is removed from local storage', () => {
+                        expect(localStorage.getItem(key)).toBeNull()
+                    })
+                })
             }) // </no initial state>
 
             describe.each(['initial', () => 'initial'])(
