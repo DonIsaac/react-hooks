@@ -3,7 +3,45 @@ import type { Dispatch, SetStateAction } from 'react'
 import { canUseDOM } from './lib/util'
 
 export type UseLocalStorage = {
+    /**
+     * Similar to `useState`, but values are persisted in the browser's local
+     * storage.
+     *
+     * During the initial render, if a value is stored in local storage under the
+     * given key, that value will be used as the initial state. Otherwise, the
+     * state will be undefined.
+     *
+     * @param key - The key to store values under in local storage.
+     * @returns A tuple containing a stateful value and a setter function, identical
+     * to the return value of {@link useState}.
+     *
+     * @template T - The type of the stateful value.
+     *
+     * @see {@link localStorage}
+     * @see {@link useState}
+     */
     <T>(key: string): [T | undefined, Dispatch<SetStateAction<T | undefined>>]
+
+    /**
+     * Similar to `useState`, but values are persisted in the browser's local
+     * storage.
+     *
+     * If provided, the initial state parameter will be used as the state's
+     * starting value. Otherwise existing data persisted in local storage will
+     * be used. If neither are available, the state will be `undefined`.
+     *
+     * @param key - The key to store values under in local storage.
+     * @param initialState - Either a value or a factory function to use as the
+     * state's initial value.
+     *
+     * @returns A tuple containing a stateful value and a setter function,
+     * identical to the return value of {@link useState}.
+     *
+     * @template T - The type of the stateful value.
+     *
+     * @see {@link localStorage}
+     * @see {@link useState}
+     */
     <T>(key: string, initialState: T | (() => T)): [
         T,
         Dispatch<SetStateAction<T>>
@@ -22,6 +60,7 @@ const useClientLocalStorage: UseLocalStorage = (
     initialState = undefined
 ) => {
     const [value, _setValue] = useState(() => {
+        // TODO: Should we check for `null` as well?
         if (initialState !== undefined) {
             return typeof initialState === 'function'
                 ? initialState()
@@ -67,6 +106,28 @@ const useServerLocalStorage: UseLocalStorage = (
     return useState(initialState)
 }
 
-export const useLocalStorage: UseLocalStorage = canUseDOM()
+const useLocalStorage: UseLocalStorage = canUseDOM()
     ? useClientLocalStorage
     : useServerLocalStorage
+
+/**
+ * Similar to `useState`, but values are persisted in the browser's local
+ * storage.
+ *
+ * If provided, the initial state parameter will be used as the state's
+ * starting value. Otherwise existing data persisted in local storage will
+ * be used. If neither are available, the state will be `undefined`.
+ *
+ * @param key - The key to store values under in local storage.
+ * @param initialState - Either a value or a factory function to use as the
+ * state's initial value.
+ *
+ * @returns A tuple containing a stateful value and a setter function,
+ * identical to the return value of {@link useState}.
+ *
+ * @template T - The type of the stateful value.
+ *
+ * @see {@link localStorage}
+ * @see {@link useState}
+ */
+export default useLocalStorage

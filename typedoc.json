@@ -1,5 +1,25 @@
 {
     "name": "React Hooks",
     "readme": "README.md",
-    "out": "docs"
+    "out": "docs",
+    "blockTags": [
+        "@deprecated",
+        "@param",
+        "@remarks",
+        "@returns",
+        "@throws",
+        "@privateRemarks",
+        "@defaultValue",
+        "@typeParam",
+        "@module",
+        "@inheritDoc",
+        "@group",
+        "@category",
+        "@template",
+        "@type",
+        "@typedef",
+        "@callback",
+        "@prop",
+        "@property"
+    ]
 }
