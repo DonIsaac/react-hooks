@@ -1,11 +1,6 @@
-import {
-    renderHook,
-    RenderHookResult,
-    act,
-    WaitForNextUpdateOptions,
-} from '@testing-library/react-hooks'
+import { renderHook, RenderHookResult, act } from '@testing-library/react-hooks'
 import React from 'react'
-import { useLocalStorage } from './useLocalStorage'
+import useLocalStorage from './useLocalStorage'
 
 type TValue<T> = [T, React.Dispatch<React.SetStateAction<T>>]
 describe('useLocalStorage(key)', () => {
