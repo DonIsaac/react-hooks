@@ -1,7 +1,7 @@
 {
   "name": "@donisaac/react-hooks",
   "description": "A library of assorted React hooks",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "homepage": "https://github.com/DonIsaac/react-hooks#readme",
   "keywords": [
     "react",
