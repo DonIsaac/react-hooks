@@ -3,10 +3,18 @@
  */
 export type RequestStatus = 'pending' | 'success' | 'error'
 
-export type RequestState<T, E = Error> =
-    | RequestStatePending
-    | RequestStateSuccess<T>
-    | RequestStateError<E>
+export type RequestState<T, E = Error> = RequestActions &
+    (RequestStatePending | RequestStateSuccess<T> | RequestStateError<E>)
+
+type RequestActions = {
+    /**
+     * Manually re-execute the request.
+     *
+     * The request status gets reset to `pending` and the request is executed
+     * again.  Useful for user-based refreshing.
+     */
+    refetch: () => void
+}
 
 type RequestStatePending = {
     /**

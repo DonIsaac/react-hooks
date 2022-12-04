@@ -21,22 +21,19 @@ describe('usePaginated(to, options)', () => {
             expect(fetchMock).toBeCalledWith(`${url}/?page=0`, undefined)
         })
 
-        it.failing(
-            'should fetch the next/prev page when nextPage() then prevPage() are called',
-            async () => {
-                act(() => {
-                    result.result.current.nextPage()
-                })
-                await result.waitForNextUpdate()
-                expect(fetchMock).toBeCalledWith(`${url}/?page=1`, undefined)
+        it('should fetch the next/prev page when nextPage() then prevPage() are called', async () => {
+            act(() => {
+                result.result.current.nextPage()
+            })
+            await result.waitForNextUpdate()
+            expect(fetchMock).toBeCalledWith(`${url}/?page=1`, undefined)
 
-                act(() => {
-                    result.result.current.prevPage()
-                })
-                await result.waitForNextUpdate()
-                expect(fetchMock).toBeCalledWith(`${url}/?page=0`, undefined)
-            }
-        )
+            act(() => {
+                result.result.current.prevPage()
+            })
+            await result.waitForNextUpdate()
+            expect(fetchMock).toBeCalledWith(`${url}/?page=0`, undefined)
+        })
 
         it('prevPage() should not decrement the page number past `pageStart`', async () => {
             act(() => {
