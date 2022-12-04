@@ -3,11 +3,12 @@ import {
     RenderHookResult,
     RenderResult,
     WaitForNextUpdateOptions,
+    act,
 } from '@testing-library/react-hooks'
 import { SynchronousPromise } from 'synchronous-promise'
 import { MockResponseInit } from 'jest-fetch-mock'
 import useFetch from './useFetch'
-import { RequestState } from './types'
+import { RequestState } from '../types'
 
 describe('useFetch', () => {
     const waitOptions: WaitForNextUpdateOptions = {
@@ -26,15 +27,18 @@ describe('useFetch', () => {
 
     afterEach(() => {
         fetchMock.resetMocks()
+        result?.unmount()
     })
 
     describe('When fetch resolves with a json body', () => {
         describe('when the url is "https://jsonplaceholder.typicode.com/todos/1"', () => {
+            const url = 'https://jsonplaceholder.typicode.com/todos/1'
+
             beforeEach(async () => {
-                result = renderHook(() =>
-                    useFetch('https://jsonplaceholder.typicode.com/todos/1')
-                )
-                await result.waitForNextUpdate(waitOptions)
+                result = renderHook(() => useFetch(url))
+                await act(async () => {
+                    await result.waitForNextUpdate(waitOptions)
+                })
             })
 
             it('should parse and return the expected result', async () => {
@@ -53,6 +57,48 @@ describe('useFetch', () => {
 
             it('error should be null', () => {
                 expect(result.result.current.error).toBeNull()
+            })
+
+            describe('when data is re-fetched', () => {
+                beforeEach(() => {
+                    act(() => {
+                        result.result.current.refetch()
+                    })
+                })
+
+                it('should re-set the request state', () => {
+                    // act(() => {
+                    //     result.result.current.refetch()
+                    // })
+                    const { status, data, error } = result.result.current
+                    expect(status).toBe('pending')
+                    expect(data).toBeNull()
+                    expect(error).toBeNull()
+                })
+
+                it('should re-execute the request', () => {
+                    // act(() => {
+                    //     result.result.current.refetch()
+                    // })
+                    expect(fetchMock).toHaveBeenCalledTimes(2)
+                    expect(fetchMock).toHaveBeenLastCalledWith(url, undefined)
+                })
+
+                it('after the request resolves, the state should be updated to success', async () => {
+                    // act(() => {
+                    // })
+                    // await act(async () => {
+                    //     result.result.current.refetch()
+                    //     await result.waitForNextUpdate(waitOptions)
+                    // })
+                    await act(async () => {
+                        await result.waitForNextUpdate(waitOptions)
+                    })
+                    const { status, data, error } = result.result.current
+                    expect(status).toBe('success')
+                    expect(data).toEqual(expect.anything())
+                    expect(error).toBeNull()
+                })
             })
         })
 
@@ -76,7 +122,9 @@ describe('useFetch', () => {
                     })
                 )
                 result = renderHook(() => useFetch('https://example.com'))
-                await result.waitForNextUpdate(waitOptions)
+                await act(async () => {
+                    await result.waitForNextUpdate(waitOptions)
+                })
             })
 
             it('should set the status to "success"', () => {
@@ -131,6 +179,9 @@ describe('useFetch', () => {
 
         it('should set status to "success"', () => {
             expect(result.result.current.status).toBe('success')
+        })
+        it('no error should be set', () => {
+            expect(result.result.current.error).toBeNull()
         })
     })
 
@@ -190,6 +241,10 @@ describe('useFetch', () => {
             expect(result.result.current.error).toBeNull()
         })
 
+        it('refetch should be a function', () => {
+            expect(result.result.current.refetch).toBeInstanceOf(Function)
+        })
+
         describe('when the response then resolves', () => {
             beforeEach(async () => {
                 promise.resume()
@@ -206,6 +261,41 @@ describe('useFetch', () => {
 
             it('should set error to null', () => {
                 expect(result.result.current.error).toBeNull()
+            })
+
+            describe('when data is later re-fetched', () => {
+                beforeEach(() => {
+                    promise = SynchronousPromise.resolve({
+                        // response has new data
+                        body: JSON.stringify({ foo: 'bar', baz: 'bang' }),
+                        init: {
+                            status: 200,
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        },
+                    }).pause()
+
+                    act(() => {
+                        result.result.current.refetch()
+                    })
+                })
+
+                it('the returned state should be reset to the pending state', () => {
+                    expect(result.result.current.status).toBe('pending')
+                    expect(result.result.current.data).toBeNull()
+                    expect(result.result.current.error).toBeNull()
+                })
+                it('when the request resolves, should update to a successful state with the new data', async () => {
+                    promise.resume()
+                    await result.waitForNextUpdate(waitOptions)
+                    expect(result.result.current.status).toBe('success')
+                    expect(result.result.current.data).toEqual({
+                        foo: 'bar',
+                        baz: 'bang',
+                    })
+                    expect(result.result.current.error).toBeNull()
+                })
             })
         })
     })
