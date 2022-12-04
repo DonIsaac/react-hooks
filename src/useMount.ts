@@ -1,4 +1,4 @@
-import { EffectCallback, useEffect } from 'react'
+import { EffectCallback, useEffect, useRef } from 'react'
 
 /**
  * Similar to {@link useEffect}, but `effect` is only called once after the
@@ -25,8 +25,16 @@ import { EffectCallback, useEffect } from 'react'
  *              the DOM.
  */
 const useMount = (effect: EffectCallback) => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    useEffect(effect, [])
+    // NOTE: After React 18, effects rendered in strict mode will be invoked
+    // twice. This ref ensures effect is only ever called once.
+    const mounted = useRef(false)
+    useEffect(() => {
+        if (!mounted.current) {
+            mounted.current = true
+            return effect()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 }
 
 export default useMount

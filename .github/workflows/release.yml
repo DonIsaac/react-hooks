@@ -29,7 +29,9 @@ jobs:
         run: yarn build:docs
 
       - name: Publish Documentation
-        run: yarn publish:docs
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: docs
 
       - name: Publish Package to NPM
         uses: JS-DevTools/npm-publish@v1
