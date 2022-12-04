@@ -37,7 +37,7 @@
   },
   "lint-staged": {
     "src/*.{ts,tsx}": "eslint --fix",
-    "package.json": "auto-changelog -p"
+    "package.json": "yarn changelog"
   },
   "devDependencies": {
     "@shopify/jest-dom-mocks": "^4.0.2",
