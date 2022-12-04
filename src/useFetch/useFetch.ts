@@ -1,7 +1,14 @@
-import { useState, useEffect, useDebugValue } from 'react'
-import { RequestState, RequestStatus } from './types'
-import { parseBody } from './lib/parseBody'
-import useMemoCompare from './useMemoCompare'
+import {
+    useState,
+    useEffect,
+    useDebugValue,
+    useTransition,
+    useCallback,
+    startTransition,
+} from 'react'
+import { RequestState, RequestStatus } from '../types'
+import { parseBody } from '../lib/parseBody'
+import useMemoCompare from '../useMemoCompare'
 
 /**
  * Sends a {@link fetch} request to a URL.
@@ -39,12 +46,18 @@ export default function useFetch<T = any, E = Error>(
     const [data, setData] = useState<T | null>(null)
     const [error, setError] = useState<E | null>(null)
     const [status, setStatus] = useState<RequestStatus>('pending')
+    const [shouldRefetch, setShouldRefetch] = useState(true)
+    const [isRefetchPending, startRefetch] = useTransition()
+
     useDebugValue(status)
 
     const memoTo = useMemoCompare(to)
     const memoOpts = useMemoCompare(opts)
 
     useEffect(() => {
+        if (!shouldRefetch) return
+        startTransition(() => setShouldRefetch(false))
+
         const sendRequest = async () => {
             if (!memoTo) {
                 return
@@ -56,16 +69,23 @@ export default function useFetch<T = any, E = Error>(
                 // If the request fails, set the error object. Response may contain
                 // error details - include them if available
                 if (!res.ok) {
-                    const errPayload: Record<string, unknown> = await parseBody(
-                        res
-                    )
-                    delete errPayload['__proto__']
                     const err = new Error(`${res.status}: ${res.statusText}`)
-                    Object.assign(err, errPayload)
+                    const errPayload = await parseBody(res)
+                    if (typeof errPayload === 'object') {
+                        delete (errPayload as Record<string, unknown>)[
+                            '__proto__'
+                        ]
+                        Object.assign(err, errPayload)
+                    } else if (typeof errPayload === 'string') {
+                        if (errPayload.length <= 100) {
+                            err.message += ` - ${errPayload}`
+                        }
+                        Object.assign(err, { error: errPayload })
+                    }
                     throw err
                 } else {
                     // Request succeeds, parse the response and set the data object
-                    const payload = await parseBody<T>(res)
+                    const payload = (await parseBody(res)) as T
                     setData(payload)
                     setStatus('success')
                 }
@@ -77,6 +97,21 @@ export default function useFetch<T = any, E = Error>(
 
         sendRequest()
         // TODO add opts back.
-    }, [memoTo, memoOpts])
-    return { status, data, error } as RequestState<T, E>
+    }, [memoTo, memoOpts, shouldRefetch])
+
+    const refetch = useCallback(function refetch() {
+        startRefetch(() => {
+            setData(null)
+            setError(null)
+            setStatus('pending')
+            setShouldRefetch(true)
+        })
+    }, [])
+
+    return {
+        status: isRefetchPending ? 'pending' : status,
+        data,
+        error,
+        refetch,
+    } as RequestState<T, E>
 }
