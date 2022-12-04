@@ -1,3 +1,5 @@
+version: '2'
+
 plugins:
   eslint:
     enabled: true
@@ -7,6 +9,13 @@ plugins:
       extensions:
         - '.ts'
         - '.tsx'
+checks:
+  complex-logic:
+    config:
+      threshold: 10
+  file-lines:
+    config:
+      threshold: 250
 
 exclude_patterns:
   - '**/node_modules/**'
