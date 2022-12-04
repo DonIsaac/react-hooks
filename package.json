@@ -32,7 +32,12 @@
     "tc": "tsc -p tsconfig.strict.json",
     "clean": "rimraf .cache dist coverage *.tgz *.tsbuildinfo || true",
     "changelog": "auto-changelog -p && git add CHANGELOG.md",
-    "publish:docs": "gh-pages --dir docs"
+    "publish:docs": "gh-pages --dir docs",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "src/*.{ts,tsx}": "eslint --fix",
+    "package.json": "yarn changelog"
   },
   "devDependencies": {
     "@shopify/jest-dom-mocks": "^4.0.2",
@@ -55,10 +60,12 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-tsdoc": "^0.2.17",
     "gh-pages": "^4.0.0",
+    "husky": "^8.0.2",
     "jest": "^28.1.3",
     "jest-environment-jsdom": "^28.1.2",
     "jest-fetch-mock": "^3.0.3",
     "jsdom": "^20.0.3",
+    "lint-staged": "^13.1.0",
     "prettier": "^2.8.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
