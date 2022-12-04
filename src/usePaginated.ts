@@ -1,6 +1,6 @@
 import { useCallback, useState, useDebugValue, useMemo } from 'react'
 import useFetch from './useFetch'
-import { RequestState } from './types'
+import { RequestState } from './useFetch'
 import useMemoCompare from './useMemoCompare'
 
 export interface UsePaginatedOptions {

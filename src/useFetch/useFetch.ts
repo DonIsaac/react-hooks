@@ -6,7 +6,7 @@ import {
     useCallback,
     useReducer,
 } from 'react'
-import { RequestState, RequestStatus } from '../types'
+import { RequestState, RequestStatus } from './types'
 import { parseBody } from './parseBody'
 import useMemoCompare from '../useMemoCompare'
 
