@@ -1,0 +1,287 @@
+<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>React Hooks</title><meta name="description" content="Documentation for React Hooks"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os"</script><header class="tsd-page-toolbar">
+<div class="tsd-toolbar-contents container">
+<div class="table-cell" id="tsd-search" data-base=".">
+<div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M15.7824 13.833L12.6666 10.7177C12.5259 10.5771 12.3353 10.499 12.1353 10.499H11.6259C12.4884 9.39596 13.001 8.00859 13.001 6.49937C13.001 2.90909 10.0914 0 6.50048 0C2.90959 0 0 2.90909 0 6.49937C0 10.0896 2.90959 12.9987 6.50048 12.9987C8.00996 12.9987 9.39756 12.4863 10.5008 11.6239V12.1332C10.5008 12.3332 10.5789 12.5238 10.7195 12.6644L13.8354 15.7797C14.1292 16.0734 14.6042 16.0734 14.8948 15.7797L15.7793 14.8954C16.0731 14.6017 16.0731 14.1267 15.7824 13.833ZM6.50048 10.499C4.29094 10.499 2.50018 8.71165 2.50018 6.49937C2.50018 4.29021 4.28781 2.49976 6.50048 2.49976C8.71001 2.49976 10.5008 4.28708 10.5008 6.49937C10.5008 8.70852 8.71314 10.499 6.50048 10.499Z" fill="var(--color-text)"></path></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div>
+<div class="field">
+<div id="tsd-toolbar-links"></div></div>
+<ul class="results">
+<li class="state loading">Preparing search index...</li>
+<li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">React Hooks</a></div>
+<div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="2" fill="var(--color-text)"></rect><rect x="1" y="7" width="14" height="2" fill="var(--color-text)"></rect><rect x="1" y="11" width="14" height="2" fill="var(--color-text)"></rect></svg></a></div></div></header>
+<div class="container container-main">
+<div class="col-8 col-content">
+<div class="tsd-page-title">
+<h2>React Hooks</h2></div>
+<div class="tsd-panel tsd-typography">
+<a href="#react-hooks" id="react-hooks" style="color: inherit; text-decoration: none;">
+  <h1>React Hooks</h1>
+</a>
+<center>
+
+<p><a href="https://github.com/DonIsaac/react-hooks/actions/workflows/gated.yml"><img src="https://github.com/DonIsaac/react-hooks/actions/workflows/gated.yml/badge.svg" alt="Gated
+CI"></a>
+<a href="https://codeclimate.com/github/DonIsaac/react-hooks/maintainability"><img src="https://api.codeclimate.com/v1/badges/b6ed3aa3919453639f7a/maintainability" alt="Maintainability"></a>
+<a href="https://codeclimate.com/github/DonIsaac/react-hooks/test_coverage"><img src="https://api.codeclimate.com/v1/badges/b6ed3aa3919453639f7a/test_coverage" alt="Test Coverage"></a></p>
+</center>
+
+<p>A toolkit of useful React hooks.</p>
+
+<a href="#hooks" id="hooks" style="color: inherit; text-decoration: none;">
+  <h1>Hooks</h1>
+</a>
+<ul>
+<li><a href="#usefetchurl-fetchoptions"><code>useFetch(url, fetchOptions)</code></a></li>
+<li><a href="#usememocomparecurr-compare"><code>useMemoCompare(curr, compare)</code></a></li>
+<li><a href="#usedelayedcallbackcb-opts"><code>useDelayedCallback(cb, opts)</code></a></li>
+<li><a href="#useintervalcallback-delay"><code>useInterval(callback, delay)</code></a></li>
+<li><a href="#usemeasuredcallbackcallback-deps-onmeasure"><code>useMeasuredCallback(callback, deps, onMeasure?)</code></a></li>
+<li><a href="#usemounteffect"><code>useMount(effect)</code></a></li>
+<li><a href="#usedidmount"><code>useDidMount()</code></a></li>
+<li><a href="#useforceupdate"><code>useForceUpdate()</code></a></li>
+<li><a href="#uselocalstoragekey-initialvalue"><code>useLocalStorage(key, initialValue?)</code></a></li>
+</ul>
+
+<a href="#usefetchurl-fetchoptions" id="usefetchurl-fetchoptions" style="color: inherit; text-decoration: none;">
+  <h2><code>useFetch(url, fetchOptions)</code></h2>
+</a>
+<p>Makes a <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">fetch</a>
+request to a URL, returning information about the state of the request. </p>
+<p>The state object contains three properties: <code>status</code>, <code>data</code>, and <code>error</code>. By
+checking <code>status</code> you can create lazy-loaded components.</p>
+<ul>
+<li><p>While the request is in progress, <code>status</code> will be <code>pending</code> and both <code>data</code>
+and <code>error</code> will be <code>null</code>.</p>
+</li>
+<li><p>When the request completes, <code>status</code> will be <code>success</code>. The response payload
+will be parsed and stored in <code>data</code>.</p>
+</li>
+<li><p>If the request fails, <code>status</code> is set to <code>error</code> and the thrown error is stored
+in the <code>error</code> property.</p>
+</li>
+</ul>
+
+<a href="#examples" id="examples" style="color: inherit; text-decoration: none;">
+  <h3>Examples</h3>
+</a>
+<p>This example creates a TODO list from data retrieved from your API. JSON data
+in the response body will be parsed into an object.</p>
+<pre><code class="language-tsx"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">FC</span><span class="hl-1">, </span><span class="hl-2">useEffect</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;react&#39;</span><br/><span class="hl-0">import</span><span class="hl-1"> </span><span class="hl-2">useFetch</span><span class="hl-1">, { </span><span class="hl-2">RequestState</span><span class="hl-1">, </span><span class="hl-2">RequestStatus</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@donisaac/react-hooks&#39;</span><br/><br/><span class="hl-4">type</span><span class="hl-1"> </span><span class="hl-5">TodoTasks</span><span class="hl-1"> = </span><span class="hl-5">string</span><span class="hl-1">[]</span><br/><br/><span class="hl-6">// Create a list of todo items from data fetched from your backend</span><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-7">TodoList</span><span class="hl-1">: </span><span class="hl-5">FC</span><span class="hl-1"> = () </span><span class="hl-4">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-4">const</span><span class="hl-1"> { </span><span class="hl-8">status</span><span class="hl-1">, </span><span class="hl-8">data</span><span class="hl-1">, </span><span class="hl-8">error</span><span class="hl-1"> } = </span><span class="hl-7">useFetch</span><span class="hl-1">&lt;</span><span class="hl-5">TodoTasks</span><span class="hl-1">&gt;(</span><span class="hl-3">&#39;https://my-api.com/todo&#39;</span><span class="hl-1">)</span><br/><br/><span class="hl-1">    </span><span class="hl-6">// Do _not_ use data in your dependency array! Instead, use status.</span><br/><span class="hl-1">    </span><span class="hl-7">useEffect</span><span class="hl-1">(() </span><span class="hl-4">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">        </span><span class="hl-2">console</span><span class="hl-1">.</span><span class="hl-7">log</span><span class="hl-1">(</span><span class="hl-3">&#39;Todo tasks: &#39;</span><span class="hl-1">, </span><span class="hl-2">data</span><span class="hl-1">)</span><br/><span class="hl-1">    }, [</span><span class="hl-2">status</span><span class="hl-1">])</span><br/><br/><span class="hl-1">    </span><span class="hl-0">if</span><span class="hl-1"> (</span><span class="hl-2">status</span><span class="hl-1"> === </span><span class="hl-3">&#39;pending&#39;</span><span class="hl-1">) {</span><br/><span class="hl-1">        </span><span class="hl-6">// API request has not completed</span><br/><span class="hl-1">        </span><span class="hl-0">return</span><span class="hl-1"> </span><span class="hl-9">&lt;</span><span class="hl-10">span</span><span class="hl-9">&gt;</span><span class="hl-1">Getting tasks...</span><span class="hl-9">&lt;/</span><span class="hl-10">span</span><span class="hl-9">&gt;</span><br/><br/><span class="hl-1">    } </span><span class="hl-0">else</span><span class="hl-1"> </span><span class="hl-0">if</span><span class="hl-1"> (</span><span class="hl-2">status</span><span class="hl-1"> === </span><span class="hl-3">&#39;success&#39;</span><span class="hl-1">) {</span><br/><span class="hl-1">        </span><span class="hl-6">// Successfully got data from API</span><br/><span class="hl-1">        </span><span class="hl-0">return</span><span class="hl-1"> (</span><br/><span class="hl-1">            </span><span class="hl-9">&lt;</span><span class="hl-10">ol</span><span class="hl-1"> </span><span class="hl-11">id</span><span class="hl-1">=</span><span class="hl-3">&quot;tasks&quot;</span><span class="hl-9">&gt;</span><br/><span class="hl-1">                </span><span class="hl-4">{</span><span class="hl-2">data</span><span class="hl-12">.</span><span class="hl-7">map</span><span class="hl-12">(</span><span class="hl-2">task</span><span class="hl-12"> </span><span class="hl-4">=&gt;</span><span class="hl-12"> </span><span class="hl-9">&lt;</span><span class="hl-10">li</span><span class="hl-12"> </span><span class="hl-11">key</span><span class="hl-1">=</span><span class="hl-4">{</span><span class="hl-2">task</span><span class="hl-4">}</span><span class="hl-9">&gt;</span><span class="hl-4">{</span><span class="hl-2">task</span><span class="hl-4">}</span><span class="hl-9">&lt;/</span><span class="hl-10">li</span><span class="hl-9">&gt;</span><span class="hl-12">)</span><span class="hl-4">}</span><br/><span class="hl-1">            </span><span class="hl-9">&lt;/</span><span class="hl-10">ol</span><span class="hl-9">&gt;</span><br/><span class="hl-1">        )</span><br/><br/><span class="hl-1">    } </span><span class="hl-0">else</span><span class="hl-1"> {</span><br/><span class="hl-1">        </span><span class="hl-6">// Fetch threw an error, usually because the API returned a 4xx or 5xx</span><br/><span class="hl-1">        </span><span class="hl-6">// response.</span><br/><span class="hl-1">        </span><span class="hl-0">return</span><span class="hl-1"> </span><span class="hl-9">&lt;</span><span class="hl-10">span</span><span class="hl-9">&gt;</span><span class="hl-1">Could not get task list: $</span><span class="hl-4">{</span><span class="hl-2">error</span><span class="hl-12">.</span><span class="hl-2">message</span><span class="hl-4">}</span><span class="hl-9">&lt;/</span><span class="hl-10">span</span><span class="hl-9">&gt;</span><br/><span class="hl-1">    }</span><br/><span class="hl-1">}</span>
+</code></pre>
+<p>This example gets a user&#39;s profile picture and displays it in an image. When
+response bodies contain images, they are parsed into
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/Blob">Blobs</a>.</p>
+<pre><code class="language-tsx"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">FC</span><span class="hl-1">, </span><span class="hl-2">useState</span><span class="hl-1">, </span><span class="hl-2">useEffect</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;react&#39;</span><br/><span class="hl-0">import</span><span class="hl-1"> </span><span class="hl-2">useFetch</span><span class="hl-1">, { </span><span class="hl-2">RequestState</span><span class="hl-1">, </span><span class="hl-2">RequestStatus</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@donisaac/react-hooks&#39;</span><br/><br/><span class="hl-0">import</span><span class="hl-1"> </span><span class="hl-2">defaultProfilePicture</span><span class="hl-1"> </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;./img/default-profile.png&#39;</span><br/><br/><span class="hl-6">// Get the user&#39;s profile picture from your backend and display it as an image</span><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-7">ProfilePicture</span><span class="hl-1">: </span><span class="hl-5">FC</span><span class="hl-1">&lt;{ </span><span class="hl-2">username</span><span class="hl-1">: </span><span class="hl-5">string</span><span class="hl-1"> }&gt; = ({ </span><span class="hl-2">username</span><span class="hl-1"> }) </span><span class="hl-4">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-4">const</span><span class="hl-1"> {</span><br/><span class="hl-1">        </span><span class="hl-8">status</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-2">data</span><span class="hl-1">: </span><span class="hl-8">profilePic</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-8">error</span><br/><span class="hl-1">    } = </span><span class="hl-7">useFetch</span><span class="hl-1">&lt;</span><span class="hl-5">Blob</span><span class="hl-1">&gt;(</span><span class="hl-3">`https://my-api.com/user/</span><span class="hl-4">${</span><span class="hl-2">username</span><span class="hl-4">}</span><span class="hl-3">/profile`</span><span class="hl-1">)</span><br/><br/><span class="hl-1">    </span><span class="hl-4">const</span><span class="hl-1"> [</span><span class="hl-8">imageSrc</span><span class="hl-1">, </span><span class="hl-8">setImageSrc</span><span class="hl-1">] = </span><span class="hl-7">useState</span><span class="hl-1">(</span><span class="hl-2">defaultProfilePicture</span><span class="hl-1">)</span><br/><br/><span class="hl-1">    </span><span class="hl-7">useEffect</span><span class="hl-1">(() </span><span class="hl-4">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">        </span><span class="hl-0">if</span><span class="hl-1"> (</span><span class="hl-2">status</span><span class="hl-1"> === </span><span class="hl-3">&#39;success&#39;</span><span class="hl-1">) {</span><br/><span class="hl-1">            </span><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-8">imageUrl</span><span class="hl-1">: </span><span class="hl-5">string</span><span class="hl-1"> = </span><span class="hl-8">URL</span><span class="hl-1">.</span><span class="hl-7">createObjectURL</span><span class="hl-1">(</span><span class="hl-2">data</span><span class="hl-1">)</span><br/><span class="hl-1">            </span><span class="hl-7">setImageSrc</span><span class="hl-1">(</span><span class="hl-2">imageUrl</span><span class="hl-1">)</span><br/><br/><span class="hl-1">        } </span><span class="hl-0">else</span><span class="hl-1"> </span><span class="hl-0">if</span><span class="hl-1"> (</span><span class="hl-2">status</span><span class="hl-1"> === </span><span class="hl-3">&#39;error&#39;</span><span class="hl-1">) {</span><br/><span class="hl-1">            </span><span class="hl-6">// Log any errors that occur so we know there&#39;s a problem.</span><br/><span class="hl-1">            </span><span class="hl-6">// Don&#39;t change the profile picture - we&#39;ll fall back to the default</span><br/><span class="hl-1">            </span><span class="hl-6">// one.</span><br/><span class="hl-1">            </span><span class="hl-2">console</span><span class="hl-1">.</span><span class="hl-7">error</span><span class="hl-1">(</span><span class="hl-2">error</span><span class="hl-1">)</span><br/><span class="hl-1">        }</span><br/><span class="hl-1">    }, [</span><span class="hl-2">status</span><span class="hl-1">])</span><br/><br/><span class="hl-1">    </span><span class="hl-0">return</span><span class="hl-1"> (</span><br/><span class="hl-1">        </span><span class="hl-9">&lt;</span><span class="hl-10">img</span><br/><span class="hl-1">            </span><span class="hl-11">className</span><span class="hl-1">=</span><span class="hl-3">&quot;profile-pic&quot;</span><br/><span class="hl-1">            </span><span class="hl-11">src</span><span class="hl-1">=</span><span class="hl-4">{</span><span class="hl-2">defaultProfilePicture</span><span class="hl-4">}</span><br/><span class="hl-1">            </span><span class="hl-11">alt</span><span class="hl-1">=</span><span class="hl-4">{</span><span class="hl-3">`</span><span class="hl-4">${</span><span class="hl-2">username</span><span class="hl-4">}</span><span class="hl-3">&#39;s profile picture`</span><span class="hl-4">}</span><br/><span class="hl-1">        </span><span class="hl-9">/&gt;</span><br/><span class="hl-1">    )</span><br/><span class="hl-1">}</span>
+</code></pre>
+<hr>
+
+<a href="#usememocomparecurr-compare" id="usememocomparecurr-compare" style="color: inherit; text-decoration: none;">
+  <h2><code>useMemoCompare(curr, compare)</code></h2>
+</a>
+<p>Similar to <a href="https://reactjs.org/docs/hooks-reference.html#useMemo">useMemo</a>,
+this hook memoizes an object by comparing it with a comparison function. This
+hook doesn&#39;t aim to avoid expensive computation, rather it aims to provide a
+stable value for a deeply nested object so that it can be used within a
+dependency array.</p>
+<p>Comparison functions take two parameters of the same type and return <code>true</code>
+if they are the same and <code>false</code> if they are not. If a comparison function
+is not provided, it defaults to a limited deep equality check.</p>
+<p>This hook was inspired by useHook&#39;s
+[useMemoCompare][<a href="https://usehooks.com/useMemoCompare%5D">https://usehooks.com/useMemoCompare]</a>, but the implementation
+is different.</p>
+
+<a href="#example" id="example" style="color: inherit; text-decoration: none;">
+  <h3>Example</h3>
+</a>
+<pre><code class="language-tsx"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">FC</span><span class="hl-1">, </span><span class="hl-2">useEffect</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;react&#39;</span><br/><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">useMemoCompare</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@donisaac/react-hooks&#39;</span><br/><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">makeApiCall</span><span class="hl-1">, </span><span class="hl-2">ApiCallPayload</span><span class="hl-1">, </span><span class="hl-2">ApiResult</span><span class="hl-1">, </span><span class="hl-2">arePayloadsEqual</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;./api&#39;</span><br/><br/><span class="hl-0">export</span><span class="hl-1"> </span><span class="hl-4">type</span><span class="hl-1"> </span><span class="hl-5">ConnectedComponentProps</span><span class="hl-1"> = {</span><br/><span class="hl-1">    </span><span class="hl-6">// Some deeply nested object to send to your API</span><br/><span class="hl-1">    </span><span class="hl-2">payload</span><span class="hl-1">: </span><span class="hl-5">APICallPayload</span><br/><span class="hl-1">}</span><br/><br/><span class="hl-0">export</span><span class="hl-1"> </span><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-7">ConnectedComponent</span><span class="hl-1">: </span><span class="hl-5">FC</span><span class="hl-1">&lt;</span><span class="hl-5">ConnectedComponentProps</span><span class="hl-1">&gt; = </span><span class="hl-2">props</span><span class="hl-1"> </span><span class="hl-4">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-4">const</span><span class="hl-1"> [</span><span class="hl-8">apiResult</span><span class="hl-1">, </span><span class="hl-8">setApiResult</span><span class="hl-1"> = </span><span class="hl-7">useState</span><span class="hl-1">&lt;</span><span class="hl-5">ApiResult</span><span class="hl-1">&gt;()</span><br/><br/><span class="hl-1">    </span><span class="hl-6">// Comparison function has type &lt;T&gt;(a: T, b: T) =&gt; boolean</span><br/><span class="hl-1">    </span><span class="hl-8">const</span><span class="hl-1"> </span><span class="hl-8">payload</span><span class="hl-1"> = </span><span class="hl-7">useMemoCompare</span><span class="hl-1">(</span><span class="hl-2">props</span><span class="hl-1">.</span><span class="hl-2">payload</span><span class="hl-1">, </span><span class="hl-2">arePayloadsEqual</span><span class="hl-1">)</span><br/><br/><span class="hl-1">    </span><span class="hl-6">// because `payload` is memoized, it is safe to use in a dependency array.</span><br/><span class="hl-1">    </span><span class="hl-6">// This useEffect will only be re-executed when `payload` is structurally</span><br/><span class="hl-1">    </span><span class="hl-6">// different.</span><br/><span class="hl-1">    </span><span class="hl-8">useEffect</span><span class="hl-1">(() =&gt; {</span><br/><span class="hl-1">        </span><span class="hl-7">makeApiCall</span><span class="hl-1">(</span><span class="hl-2">payload</span><span class="hl-1">).</span><span class="hl-7">then</span><span class="hl-1">(</span><span class="hl-2">res</span><span class="hl-1"> =&gt; </span><span class="hl-7">setApiResult</span><span class="hl-1">(</span><span class="hl-2">res</span><span class="hl-1">))</span><br/><span class="hl-1">    }, [</span><span class="hl-8">payload</span><span class="hl-1">])</span><br/><br/><span class="hl-1">    </span><span class="hl-8">return</span><span class="hl-1"> </span><span class="hl-8">apiResult</span><br/><span class="hl-1">        ? &lt;</span><span class="hl-8">div</span><span class="hl-1">&gt;</span><span class="hl-8">Loading</span><span class="hl-1">...&lt;/</span><span class="hl-8">div</span><span class="hl-1">&gt;</span><br/><span class="hl-1">        : &lt;</span><span class="hl-8">div</span><span class="hl-1">&gt;</span><span class="hl-8">Got</span><span class="hl-1"> </span><span class="hl-8">result</span><span class="hl-1"> </span><span class="hl-8">from</span><span class="hl-1"> </span><span class="hl-8">API</span><span class="hl-1">: {</span><span class="hl-8">JSON</span><span class="hl-1">.</span><span class="hl-8">stringify</span><span class="hl-1">(</span><span class="hl-8">apiResult</span><span class="hl-1">)}&lt;/</span><span class="hl-8">div</span><span class="hl-1">&gt;</span><br/><span class="hl-1">}</span>
+</code></pre>
+<hr>
+
+<a href="#usedelayedcallbackcb-opts" id="usedelayedcallbackcb-opts" style="color: inherit; text-decoration: none;">
+  <h2><code>useDelayedCallback(cb, opts)</code></h2>
+</a>
+<p>Similar to
+<a href="https://reactjs.org/docs/hooks-reference.html#usecallback">useCallback()</a>,
+this hook returns a memoized callback whose execution is deferred. This allows
+you to run expensive or lazy code you don&#39;t need done immediately, keeping the
+<a href="https://developer.mozilla.org/en-US/docs/Glossary/Main_thread">main thread</a>
+unblocked.</p>
+
+<a href="#delay-strategies" id="delay-strategies" style="color: inherit; text-decoration: none;">
+  <h3>Delay Strategies</h3>
+</a>
+<blockquote>
+<p>For a high-level description of Node&#39;s event loop, checkout <a href="https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/">this docs page</a>.</p>
+</blockquote>
+<p>To tell the hook how to defer the function, provide it a <em>strategy</em>. By default,
+<code>idle</code> is used. The available strategies are:</p>
+<ul>
+<li><p><code>idle</code>: The function will execute when the main thread isn&#39;t busy. You can
+provide a <code>timeout</code> to force execution, idle or not, after a certain amount of
+time. Uses
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback">useIdleCallback</a>.</p>
+</li>
+<li><p><code>animation</code>: The function will execute before the next repaint. Uses
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame">requestAnimationFrame</a>.</p>
+</li>
+<li><p><code>timeout</code>: The function will execute after <code>timeout</code> milliseconds. Uses
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/setTimeout">setTimeout</a>.</p>
+</li>
+<li><p><code>resolve</code>: The function will execute after all remaining currently scheduled
+events have run. More specifically, execution is pushed to the end of the
+microtask queue for the current event loop stage by using
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve">Promise.resolve().then()</a>.
+See <a href="https://github.com/nodejs/node-v0.x-archive/pull/8325">this PR</a> for
+microtask queue details.</p>
+</li>
+<li><p><code>resolve</code>: The function&#39;s execution is pushed to the end of the event queue.
+It will execute within the event loop cycle it was called in, but after all
+other currently pending events have been processed. uses</p>
+</li>
+</ul>
+<blockquote>
+<p>NOTE:
+Some strategies rely on nitty-gritty details of the event loop. Because of this,
+runtime behavior may differ depending on where you&#39;re running your
+application.For example, Node uses <a href="https://libuv.org/">libuv</a> while Chrome uses
+<a href="https://libevent.org/">libevent</a>. You may find <a href="https://stackoverflow.com/questions/31582672/what-is-the-different-between-javascript-event-loop-and-node-js-event-loop">this StackOverflow
+post</a>
+helpful.</p>
+</blockquote>
+<p>The returned callback accepts the same parameters as the original callback,
+except it returns a cancelable Promise. This Promise resolves with the original
+callback&#39;s return value, or rejects if it throws. You can use its <code>cancel()</code>
+method to prevent execution if it hasn&#39;t run yet or prevent chained promises
+from being called if it has. Additionally, pending callbacks will be canceled
+when the component unmounts, making it safe to run <code>useState()</code> setters within
+your callback.</p>
+
+<a href="#example-1" id="example-1" style="color: inherit; text-decoration: none;">
+  <h3>Example</h3>
+</a>
+<p><em>TODO</em></p>
+<hr>
+
+<a href="#useintervalcallback-delay" id="useintervalcallback-delay" style="color: inherit; text-decoration: none;">
+  <h2><code>useInterval(callback, delay)</code></h2>
+</a>
+<p>Uses <a href="https://developer.mozilla.org/en-US/docs/Web/API/setInterval">setInterval()</a>
+to repeatedly call <code>callback</code> every <code>delay</code> milliseconds.</p>
+
+<a href="#example-2" id="example-2" style="color: inherit; text-decoration: none;">
+  <h3>Example</h3>
+</a>
+<pre><code class="language-tsx"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">FC</span><span class="hl-1">, </span><span class="hl-2">useState</span><span class="hl-1">, </span><span class="hl-2">useEffect</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;react&#39;</span><br/><span class="hl-0">import</span><span class="hl-1"> </span><span class="hl-2">useInterval</span><span class="hl-1"> </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@donisaac/react-hooks&#39;</span><br/><br/><span class="hl-0">export</span><span class="hl-1"> </span><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-7">Timer</span><span class="hl-1">: </span><span class="hl-5">FC</span><span class="hl-1"> = () </span><span class="hl-4">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-4">const</span><span class="hl-1"> [</span><span class="hl-8">date</span><span class="hl-1">, </span><span class="hl-8">setDate</span><span class="hl-1">] = </span><span class="hl-7">useState</span><span class="hl-1">(</span><span class="hl-4">new</span><span class="hl-1"> </span><span class="hl-7">Date</span><span class="hl-1">())</span><br/><br/><span class="hl-1">    </span><span class="hl-6">// Update date every second</span><br/><span class="hl-1">    </span><span class="hl-7">useInterval</span><span class="hl-1">(() </span><span class="hl-4">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">        </span><span class="hl-7">setDate</span><span class="hl-1">(</span><span class="hl-4">new</span><span class="hl-1"> </span><span class="hl-7">Date</span><span class="hl-1">())</span><br/><span class="hl-1">    }, </span><span class="hl-13">1000</span><span class="hl-1">)</span><br/><br/><span class="hl-1">    </span><span class="hl-0">return</span><span class="hl-1"> (</span><br/><span class="hl-1">        </span><span class="hl-9">&lt;</span><span class="hl-10">span</span><span class="hl-9">&gt;</span><br/><span class="hl-1">            </span><span class="hl-4">{</span><span class="hl-2">date</span><span class="hl-12">.</span><span class="hl-7">toLocaleTimeString</span><span class="hl-12">()</span><span class="hl-4">}</span><br/><span class="hl-1">        </span><span class="hl-9">&lt;/</span><span class="hl-10">span</span><span class="hl-9">&gt;</span><br/><span class="hl-1">    )</span><br/><span class="hl-1">}</span>
+</code></pre>
+<hr>
+
+<a href="#usemeasuredcallbackcallback-deps-onmeasure" id="usemeasuredcallbackcallback-deps-onmeasure" style="color: inherit; text-decoration: none;">
+  <h2><code>useMeasuredCallback(callback, deps, onMeasure?)</code></h2>
+</a>
+<p>Similar to
+<a href="https://reactjs.org/docs/hooks-reference.html#usecallback">useCallback()</a>,
+this hook returns a memoized callback whose execution time is recorded. When
+the returned callback is called, the <code>onMeasure</code> callback is invoked with the
+amount of time it took to run. Execution times are also displayed in the DevTools
+Performance Timeline. This lets you monitor time-consuming operations.</p>
+
+<a href="#example-3" id="example-3" style="color: inherit; text-decoration: none;">
+  <h3>Example</h3>
+</a>
+<pre><code class="language-tsx"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">FC</span><span class="hl-1">, </span><span class="hl-2">useCallback</span><span class="hl-1">, </span><span class="hl-2">useEffect</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;react&#39;</span><br/><span class="hl-0">import</span><span class="hl-1"> </span><span class="hl-2">useMeasuredCallback</span><span class="hl-1"> </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@donisaac/react-hooks&#39;</span><br/><span class="hl-0">import</span><span class="hl-1"> </span><span class="hl-2">intensiveTask</span><span class="hl-1"> </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;./intensiveTask&#39;</span><br/><br/><span class="hl-0">export</span><span class="hl-1"> </span><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-7">MyComponent</span><span class="hl-1">: </span><span class="hl-5">FC</span><span class="hl-1">&lt;{ </span><span class="hl-2">logger</span><span class="hl-1">?: </span><span class="hl-4">typeof</span><span class="hl-1"> </span><span class="hl-2">Console</span><span class="hl-1"> }&gt; = ({</span><br/><span class="hl-1">    </span><span class="hl-2">logger</span><span class="hl-1"> = </span><span class="hl-2">console</span><br/><span class="hl-1">}) </span><span class="hl-4">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-4">const</span><span class="hl-1"> [</span><span class="hl-8">result</span><span class="hl-1">, </span><span class="hl-8">setResult</span><span class="hl-1">] = </span><span class="hl-7">useState</span><span class="hl-1">&lt;</span><span class="hl-5">ReturnType</span><span class="hl-1">&lt;</span><span class="hl-4">typeof</span><span class="hl-1"> </span><span class="hl-2">intensiveTask</span><span class="hl-1">&gt; | </span><span class="hl-5">undefined</span><span class="hl-1">&gt;(</span><span class="hl-4">undefined</span><span class="hl-1">)</span><br/><br/><span class="hl-1">    </span><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-8">onMeasure</span><span class="hl-1"> = </span><span class="hl-7">useCallback</span><span class="hl-1">((</span><span class="hl-2">measure</span><span class="hl-1">: </span><span class="hl-5">PerformanceMeasure</span><span class="hl-1">) </span><span class="hl-4">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">        </span><span class="hl-2">logger</span><span class="hl-1">.</span><span class="hl-7">log</span><span class="hl-1">(</span><span class="hl-3">`intensive task took </span><span class="hl-4">${</span><span class="hl-2">measure</span><span class="hl-12">.</span><span class="hl-2">duration</span><span class="hl-4">}</span><span class="hl-3"> ms to run`</span><span class="hl-1">)</span><br/><span class="hl-1">    })</span><br/><br/><span class="hl-1">    </span><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-8">measuredIntensiveTask</span><span class="hl-1"> = </span><span class="hl-7">useMeasuredCallback</span><span class="hl-1">(</span><br/><span class="hl-1">        </span><span class="hl-2">intensiveTask</span><span class="hl-1">,</span><br/><span class="hl-1">        [],</span><br/><span class="hl-1">        </span><span class="hl-2">onMeasure</span><br/><span class="hl-1">    )</span><br/><br/><span class="hl-1">    </span><span class="hl-6">// Only call the function when needed (it takes a while to run!)</span><br/><span class="hl-1">    </span><span class="hl-7">useEffect</span><span class="hl-1">(() </span><span class="hl-4">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">        </span><span class="hl-7">setResult</span><span class="hl-1">(</span><span class="hl-7">measuredIntensiveTask</span><span class="hl-1">())</span><br/><span class="hl-1">    }, [</span><span class="hl-2">measuredIntensiveTask</span><span class="hl-1">])</span><br/><br/><span class="hl-1">    </span><span class="hl-0">return</span><span class="hl-1"> </span><span class="hl-9">&lt;</span><span class="hl-10">div</span><span class="hl-9">&gt;</span><span class="hl-4">{</span><span class="hl-2">result</span><span class="hl-4">}</span><span class="hl-9">&lt;/</span><span class="hl-10">div</span><span class="hl-9">&gt;</span><br/><span class="hl-1">}</span>
+</code></pre>
+<hr>
+
+<a href="#usemounteffect" id="usemounteffect" style="color: inherit; text-decoration: none;">
+  <h2><code>useMount(effect)</code></h2>
+</a>
+<p>Similar to
+<a href="https://reactjs.org/docs/hooks-reference.html#useeffect">useEffect()</a>, but
+<code>effect</code> is only called once after the component has completed its initial render
+and has been mounted to the DOM. You can think of this as the hook version of
+<code>componentDidMount()</code>.</p>
+
+<a href="#example-4" id="example-4" style="color: inherit; text-decoration: none;">
+  <h3>Example</h3>
+</a>
+<pre><code class="language-tsx"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">FC</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;react&#39;</span><br/><span class="hl-0">import</span><span class="hl-1"> </span><span class="hl-2">useMount</span><span class="hl-1"> </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@donisaac/react-hooks&#39;</span><br/><br/><span class="hl-0">export</span><span class="hl-1"> </span><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-7">MyComponent</span><span class="hl-1">: </span><span class="hl-5">FC</span><span class="hl-1"> = () </span><span class="hl-4">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-7">useMount</span><span class="hl-1">(() </span><span class="hl-4">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">        </span><span class="hl-2">console</span><span class="hl-1">.</span><span class="hl-7">log</span><span class="hl-1">(</span><span class="hl-3">&#39;component has been mounted to the DOM&#39;</span><span class="hl-1">)</span><br/><br/><span class="hl-1">        </span><span class="hl-0">return</span><span class="hl-1"> () </span><span class="hl-4">=&gt;</span><span class="hl-1"> </span><span class="hl-2">console</span><span class="hl-1">.</span><span class="hl-7">log</span><span class="hl-1">(</span><span class="hl-3">&#39;component has been unmounted from the DOM&#39;</span><span class="hl-1">)</span><br/><span class="hl-1">    })</span><br/><br/><span class="hl-1">    </span><span class="hl-0">return</span><span class="hl-1"> </span><span class="hl-9">&lt;</span><span class="hl-10">div</span><span class="hl-1"> </span><span class="hl-9">/&gt;</span><br/><span class="hl-1">}</span>
+</code></pre>
+<hr>
+
+<a href="#usedidmount" id="usedidmount" style="color: inherit; text-decoration: none;">
+  <h2><code>useDidMount()</code></h2>
+</a>
+<p>Similar to <code>useMount()</code>, except it returns a boolean that is set to true when the component mounts instead of calling an effect function.</p>
+
+<a href="#example-5" id="example-5" style="color: inherit; text-decoration: none;">
+  <h3>Example</h3>
+</a>
+<pre><code class="language-tsx"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">FC</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;react&#39;</span><br/><span class="hl-0">import</span><span class="hl-1"> </span><span class="hl-2">useDidMount</span><span class="hl-1"> </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@donisaac/react-hooks&#39;</span><br/><br/><span class="hl-0">export</span><span class="hl-1"> </span><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-7">MyComponent</span><span class="hl-1">: </span><span class="hl-5">FC</span><span class="hl-1"> = () </span><span class="hl-4">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-8">isMounted</span><span class="hl-1"> = </span><span class="hl-7">useDidMount</span><span class="hl-1">()</span><br/><span class="hl-1">    </span><span class="hl-0">return</span><span class="hl-1"> (</span><br/><span class="hl-1">        </span><span class="hl-9">&lt;</span><span class="hl-10">span</span><span class="hl-9">&gt;</span><span class="hl-1">MyComponent </span><span class="hl-4">{</span><span class="hl-2">isMounted</span><span class="hl-12"> </span><span class="hl-1">?</span><span class="hl-12"> </span><span class="hl-3">&#39;is&#39;</span><span class="hl-12"> </span><span class="hl-1">:</span><span class="hl-12"> </span><span class="hl-3">&#39;is not&#39;</span><span class="hl-4">}</span><span class="hl-1"> mounted to the DOM</span><span class="hl-9">&lt;/</span><span class="hl-10">span</span><span class="hl-9">&gt;</span><br/><span class="hl-1">    )</span><br/><span class="hl-1">}</span>
+</code></pre>
+<hr>
+
+<a href="#useforceupdate" id="useforceupdate" style="color: inherit; text-decoration: none;">
+  <h2><code>useForceUpdate()</code></h2>
+</a>
+<p>Allows you to force a component to rerender whether or not React has detected a
+state change. The function returned by this hook will cause the rerender when
+called.</p>
+
+<a href="#example-6" id="example-6" style="color: inherit; text-decoration: none;">
+  <h3>Example</h3>
+</a>
+<pre><code class="language-tsx"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">FC</span><span class="hl-1">, </span><span class="hl-2">useRef</span><span class="hl-1">, </span><span class="hl-2">useEffect</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;reac</span><span class="hl-14">t</span><br/><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">useForceUpdate</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@donisaac/react-hooks&#39;</span><br/><span class="hl-6">// Displays an update counter and a button to force an update. This is </span><br/><span class="hl-6">// not exactly best practice, but it is a good example of how to use</span><br/><span class="hl-6">// this hook.</span><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-7">TestComponent</span><span class="hl-1">: </span><span class="hl-5">FC</span><span class="hl-1"> = () </span><span class="hl-4">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-8">forceUpdate</span><span class="hl-1"> = </span><span class="hl-7">useForceUpdate</span><span class="hl-1">()</span><br/><span class="hl-1">    </span><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-8">updateCount</span><span class="hl-1"> = </span><span class="hl-7">useRef</span><span class="hl-1">(</span><span class="hl-13">0</span><span class="hl-1">)</span><br/><span class="hl-1">    </span><span class="hl-6">// Increment the update counter on each rerender</span><br/><span class="hl-1">    </span><span class="hl-7">useEffect</span><span class="hl-1">(() </span><span class="hl-4">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">       </span><span class="hl-2">updateCount</span><span class="hl-1">.</span><span class="hl-2">current</span><span class="hl-1">++</span><br/><span class="hl-1">    })</span><br/><span class="hl-1">    </span><span class="hl-0">return</span><span class="hl-1"> (</span><br/><span class="hl-1">        </span><span class="hl-9">&lt;</span><span class="hl-10">div</span><span class="hl-9">&gt;</span><br/><span class="hl-1">            </span><span class="hl-9">&lt;</span><span class="hl-10">span</span><span class="hl-1"> </span><span class="hl-11">data-testid</span><span class="hl-1">=</span><span class="hl-3">&quot;update-count&quot;</span><span class="hl-1"> </span><span class="hl-11">id</span><span class="hl-1">=</span><span class="hl-3">&quot;update-count&quot;</span><span class="hl-9">&gt;</span><br/><span class="hl-1">                </span><span class="hl-4">{</span><span class="hl-2">updateCount</span><span class="hl-12">.</span><span class="hl-2">current</span><span class="hl-4">}</span><br/><span class="hl-1">            </span><span class="hl-9">&lt;/</span><span class="hl-10">span</span><span class="hl-9">&gt;</span><br/><span class="hl-1">            </span><span class="hl-9">&lt;</span><span class="hl-10">button</span><span class="hl-1"> </span><span class="hl-11">onClick</span><span class="hl-1">=</span><span class="hl-4">{</span><span class="hl-2">forceUpdate</span><span class="hl-4">}</span><span class="hl-9">&gt;</span><span class="hl-1">Force Update</span><span class="hl-9">&lt;/</span><span class="hl-10">button</span><span class="hl-9">&gt;</span><br/><span class="hl-1">        </span><span class="hl-9">&lt;/</span><span class="hl-10">div</span><span class="hl-9">&gt;</span><br/><span class="hl-1">    )</span><br/><span class="hl-1">}</span>
+</code></pre>
+
+<a href="#uselocalstoragekey-initialvalue" id="uselocalstoragekey-initialvalue" style="color: inherit; text-decoration: none;">
+  <h2><code>useLocalStorage(key, initialValue?)</code></h2>
+</a>
+<p>Similar to <a href="https://reactjs.org/docs/hooks-state.html">useState</a>, but values are
+persisted in the browser&#39;s local storage.</p>
+<p>When state is updated using the returned setter, the new value is saved to
+local storage under the given <code>key</code>. Setting the value to <code>undefined</code> will
+remove it from local storage. Local storage updates are performed lazily to
+prevent blocking the main rendering thread.</p>
+<p>If provided, the <code>initialState</code> parameter will be used as the state&#39;s
+starting value. Otherwise existing data persisted in local storage will
+be used. If neither are available, the state will be <code>undefined</code>.</p>
+</div></div>
+<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+<div class="tsd-navigation settings">
+<details class="tsd-index-accordion"><summary class="tsd-accordion-summary">
+<h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4.93896 8.531L12 15.591L19.061 8.531L16.939 6.409L12 11.349L7.06098 6.409L4.93896 8.531Z" fill="var(--color-text)"></path></svg> Settings</h3></summary>
+<div class="tsd-accordion-details">
+<div class="tsd-filter-visibility">
+<h4 class="uppercase">Member Visibility</h4><form>
+<ul id="tsd-filter-options">
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-private" name="private"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Private</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></form></div>
+<div class="tsd-theme-toggle">
+<h4 class="uppercase">Theme</h4><select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div>
+<nav class="tsd-navigation primary">
+<details class="tsd-index-accordion" open><summary class="tsd-accordion-summary">
+<h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4.93896 8.531L12 15.591L19.061 8.531L16.939 6.409L12 11.349L7.06098 6.409L4.93896 8.531Z" fill="var(--color-text)"></path></svg> Modules</h3></summary>
+<div class="tsd-accordion-details">
+<ul>
+<li class="current selected"><a href="modules.html">React <wbr/>Hooks</a>
+<ul></ul></li></ul></div></details></nav>
+<nav class="tsd-navigation secondary menu-sticky">
+<ul>
+<li class="tsd-kind-interface"><a href="interfaces/DelayedCallbackOptions.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-interface)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-256-path"></rect><path d="M9.51 16V15.016H11.298V8.224H9.51V7.24H14.19V8.224H12.402V15.016H14.19V16H9.51Z" fill="var(--color-text)" id="icon-256-text"></path></svg>Delayed<wbr/>Callback<wbr/>Options</a></li>
+<li class="tsd-kind-interface"><a href="interfaces/UsePaginatedOptions.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>Use<wbr/>Paginated<wbr/>Options</a></li>
+<li class="tsd-kind-type-alias"><a href="types/DelayStrategy.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-4194304-path"></rect><path d="M11.31 16V8.224H8.91V7.24H14.79V8.224H12.39V16H11.31Z" fill="var(--color-text)" id="icon-4194304-text"></path></svg>Delay<wbr/>Strategy</a></li>
+<li class="tsd-kind-type-alias"><a href="types/PaginatedRequest.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Paginated<wbr/>Request</a></li>
+<li class="tsd-kind-function"><a href="functions/useDelayedCallback.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-function)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-64-path"></rect><path d="M9.39 16V7.24H14.55V8.224H10.446V11.128H14.238V12.112H10.47V16H9.39Z" fill="var(--color-text)" id="icon-64-text"></path></svg>use<wbr/>Delayed<wbr/>Callback</a></li>
+<li class="tsd-kind-function"><a href="functions/useDidMount.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>use<wbr/>Did<wbr/>Mount</a></li>
+<li class="tsd-kind-function"><a href="functions/useFetch.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>use<wbr/>Fetch</a></li>
+<li class="tsd-kind-function"><a href="functions/useForceUpdate.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>use<wbr/>Force<wbr/>Update</a></li>
+<li class="tsd-kind-function"><a href="functions/useInterval.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>use<wbr/>Interval</a></li>
+<li class="tsd-kind-function"><a href="functions/useLocalStorage.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>use<wbr/>Local<wbr/>Storage</a></li>
+<li class="tsd-kind-function"><a href="functions/useMeasuredCallback.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>use<wbr/>Measured<wbr/>Callback</a></li>
+<li class="tsd-kind-function"><a href="functions/useMemoCompare.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>use<wbr/>Memo<wbr/>Compare</a></li>
+<li class="tsd-kind-function"><a href="functions/useMount.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>use<wbr/>Mount</a></li>
+<li class="tsd-kind-function"><a href="functions/usePaginated.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>use<wbr/>Paginated</a></li></ul></nav></div></div>
+<div class="container tsd-generator">
+<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div>
+<div class="overlay"></div><script src="assets/main.js"></script></body></html>
