@@ -13,6 +13,7 @@ docs/*
 # Editor files
 *.swp
 *.swo
+.vscode/settings.json
 
 # Temporary files
 *.log
