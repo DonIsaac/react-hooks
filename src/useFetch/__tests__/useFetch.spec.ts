@@ -7,13 +7,39 @@ import {
 } from '@testing-library/react-hooks'
 import { SynchronousPromise } from 'synchronous-promise'
 import { MockResponseInit } from 'jest-fetch-mock'
-import useFetch from './useFetch'
-import { RequestState } from '../types'
+import useFetch from '../useFetch'
+import { RequestState } from '../../types'
+
+const waitOptions: WaitForNextUpdateOptions = {
+    timeout: 1000,
+}
+
+const testCase = async (
+    body: string | Record<string, any>,
+    headers: Record<string, string> = {}
+) => {
+    fetchMock.doMock()
+    fetchMock.mockResponse(() =>
+        Promise.resolve({
+            body: typeof body === 'object' ? JSON.stringify(body) : body,
+            init: {
+                status: 200,
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...headers,
+                },
+            },
+        })
+    )
+    const result = renderHook(() => useFetch('https://example.com'))
+    await act(async () => {
+        await result.waitForNextUpdate(waitOptions)
+    })
+
+    return result
+}
 
 describe('useFetch', () => {
-    const waitOptions: WaitForNextUpdateOptions = {
-        timeout: 5000,
-    }
     let result: RenderHookResult<unknown, RequestState<any>>
 
     beforeAll(() => {
@@ -31,99 +57,13 @@ describe('useFetch', () => {
     })
 
     describe('When fetch resolves with a json body', () => {
-        describe('when the url is "https://jsonplaceholder.typicode.com/todos/1"', () => {
-            const url = 'https://jsonplaceholder.typicode.com/todos/1'
-
-            beforeEach(async () => {
-                result = renderHook(() => useFetch(url))
-                await act(async () => {
-                    await result.waitForNextUpdate(waitOptions)
-                })
-            })
-
-            it('should parse and return the expected result', async () => {
-                const { data } = result.result.current
-                expect(data).toEqual({
-                    userId: 1,
-                    id: 1,
-                    title: 'delectus aut autem',
-                    completed: false,
-                })
-            })
-
-            it('should set the status to "success"', () => {
-                expect(result.result.current.status).toBe('success')
-            })
-
-            it('error should be null', () => {
-                expect(result.result.current.error).toBeNull()
-            })
-
-            describe('when data is re-fetched', () => {
-                beforeEach(() => {
-                    act(() => {
-                        result.result.current.refetch()
-                    })
-                })
-
-                it('should re-set the request state', () => {
-                    // act(() => {
-                    //     result.result.current.refetch()
-                    // })
-                    const { status, data, error } = result.result.current
-                    expect(status).toBe('pending')
-                    expect(data).toBeNull()
-                    expect(error).toBeNull()
-                })
-
-                it('should re-execute the request', () => {
-                    // act(() => {
-                    //     result.result.current.refetch()
-                    // })
-                    expect(fetchMock).toHaveBeenCalledTimes(2)
-                    expect(fetchMock).toHaveBeenLastCalledWith(url, undefined)
-                })
-
-                it('after the request resolves, the state should be updated to success', async () => {
-                    // act(() => {
-                    // })
-                    // await act(async () => {
-                    //     result.result.current.refetch()
-                    //     await result.waitForNextUpdate(waitOptions)
-                    // })
-                    await act(async () => {
-                        await result.waitForNextUpdate(waitOptions)
-                    })
-                    const { status, data, error } = result.result.current
-                    expect(status).toBe('success')
-                    expect(data).toEqual(expect.anything())
-                    expect(error).toBeNull()
-                })
-            })
-        })
-
         describe('when the result tries to perform prototype pollution', () => {
             beforeEach(async () => {
-                fetchMock.doMock()
-                fetchMock.mockResponse(() =>
-                    Promise.resolve({
-                        body: JSON.stringify({
-                            a: 1,
-                            __proto__: {
-                                foo: 'pwned',
-                            },
-                        }),
-                        init: {
-                            status: 200,
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                        },
-                    })
-                )
-                result = renderHook(() => useFetch('https://example.com'))
-                await act(async () => {
-                    await result.waitForNextUpdate(waitOptions)
+                result = await testCase({
+                    a: 1,
+                    __proto__: {
+                        foo: 'pwned',
+                    },
                 })
             })
 
@@ -157,19 +97,22 @@ describe('useFetch', () => {
 
     describe('When fetch resolves with text', () => {
         beforeEach(async () => {
-            fetchMock.doMock()
-            fetchMock.mockResponse(() =>
-                Promise.resolve({
-                    body: 'Hello, world!',
-                    init: {
-                        status: 200,
-                        headers: { 'Content-Type': 'text/plain' },
-                    },
-                })
-            )
+            result = await testCase('Hello, world!', {
+                'Content-Type': 'text/plain',
+            })
+            // fetchMock.doMock()
+            // fetchMock.mockResponse(() =>
+            //     Promise.resolve({
+            //         body: 'Hello, world!',
+            //         init: {
+            //             status: 200,
+            //             headers: { 'Content-Type': 'text/plain' },
+            //         },
+            //     })
+            // )
 
-            result = renderHook(() => useFetch('https://example.com'))
-            await result.waitForNextUpdate(waitOptions)
+            // result = renderHook(() => useFetch('https://example.com'))
+            // await result.waitForNextUpdate(waitOptions)
         })
 
         it('should return the response body as text', async () => {
@@ -251,15 +194,9 @@ describe('useFetch', () => {
                 await result.waitForNextUpdate(waitOptions)
             })
 
-            it('should set status to "success"', () => {
+            it('the successful state should contain data', () => {
                 expect(result.result.current.status).toBe('success')
-            })
-
-            it('should set data to the response body', () => {
                 expect(result.result.current.data).toEqual({ foo: 'bar' })
-            })
-
-            it('should set error to null', () => {
                 expect(result.result.current.error).toBeNull()
             })
 
@@ -324,57 +261,4 @@ describe('useFetch', () => {
             expect(result.result.current.data).toBeNull()
         })
     })
-
-    describe.each([400, 404, 500])(
-        'when the API returns with a %d status code',
-        status => {
-            type ExtraContextError = Error & { extraContext: string }
-            let actual: RenderResult<RequestState<any, ExtraContextError>>
-
-            const statusTextMap = {
-                400: 'Bad Request',
-                404: 'Not Found',
-                500: 'Internal Server Error',
-            }
-
-            beforeEach(async () => {
-                fetchMock.doMock(async () => ({
-                    body: JSON.stringify({
-                        message: 'Something went wrong',
-                        extraContext: 'This is extra context',
-                        __proto__: { foo: 'bar' },
-                    }),
-                    status,
-                    statusText:
-                        statusTextMap[status as keyof typeof statusTextMap],
-                }))
-
-                result = renderHook(() =>
-                    useFetch<any, ExtraContextError>('https://example.com')
-                )
-                await result.waitForNextUpdate(waitOptions)
-                actual = result.result as RenderResult<
-                    RequestState<any, ExtraContextError>
-                >
-            })
-
-            it('should set status to "error"', () => {
-                expect(actual.current.status).toBe('error')
-            })
-            it('should set data to null', () => {
-                expect(actual.current.data).toBeNull()
-            })
-            it('should set error to an Error', () => {
-                expect(result.result.current.error).toBeInstanceOf(Error)
-            })
-            it.skip('should include extra context from the response body within the error', () => {
-                const { data, error } = actual.current
-                expect(data).toBeNull()
-                expect(error?.extraContext).toBe('Something went wrong')
-            })
-            it('should prevent prototype pollution', () => {
-                expect((actual.current.error as any).foo).toBeUndefined()
-            })
-        }
-    )
 })

@@ -4,10 +4,10 @@ import {
     useDebugValue,
     useTransition,
     useCallback,
-    startTransition,
+    useReducer,
 } from 'react'
 import { RequestState, RequestStatus } from '../types'
-import { parseBody } from '../lib/parseBody'
+import { parseBody } from './parseBody'
 import useMemoCompare from '../useMemoCompare'
 
 /**
@@ -46,7 +46,8 @@ export default function useFetch<T = any, E = Error>(
     const [data, setData] = useState<T | null>(null)
     const [error, setError] = useState<E | null>(null)
     const [status, setStatus] = useState<RequestStatus>('pending')
-    const [shouldRefetch, setShouldRefetch] = useState(true)
+    // const [shouldRefetch, setShouldRefetch] = useState(true)
+    const [manualRefetch, forceRefetch] = useReducer(s => (s + 1) % 10, 0)
     const [isRefetchPending, startRefetch] = useTransition()
 
     useDebugValue(status)
@@ -55,9 +56,6 @@ export default function useFetch<T = any, E = Error>(
     const memoOpts = useMemoCompare(opts)
 
     useEffect(() => {
-        if (!shouldRefetch) return
-        startTransition(() => setShouldRefetch(false))
-
         const sendRequest = async () => {
             if (!memoTo) {
                 return
@@ -97,14 +95,14 @@ export default function useFetch<T = any, E = Error>(
 
         sendRequest()
         // TODO add opts back.
-    }, [memoTo, memoOpts, shouldRefetch])
+    }, [memoTo, memoOpts, manualRefetch])
 
     const refetch = useCallback(function refetch() {
         startRefetch(() => {
             setData(null)
             setError(null)
             setStatus('pending')
-            setShouldRefetch(true)
+            forceRefetch()
         })
     }, [])
 

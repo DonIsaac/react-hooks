@@ -16,15 +16,22 @@ describe('useFetch error handling', () => {
         fetchMock.dontMock()
     })
 
-    describe.each([400, 500])(
+    describe.each([400, 404, 500])(
         'when the request fails with a %d error',
         errorCode => {
+            const statusTextMap = {
+                400: 'Bad Request',
+                404: 'Not Found',
+                500: 'Internal Server Error',
+            }
+
             describe('when the error response is json', () => {
                 let result: RenderHookResult<unknown, RequestState<any>>
                 let state: RequestState<any>
                 const error = {
                     error: 'Internal Server Error',
                     context: 'test',
+                    __proto__: { foo: 'bar' },
                 }
 
                 beforeEach(async () => {
@@ -58,9 +65,14 @@ describe('useFetch error handling', () => {
                     expect(actual.error).toBe(error.error)
                     expect(actual.context).toBe(error.context)
                 })
+
+                it('should prevent prototype pollution', () => {
+                    const actual = state.error as Error & Record<string, any>
+                    expect(actual.foo).toBeUndefined()
+                })
             })
 
-            it('when the error response has no content type or body, the error from the request state is a normal error', () => {
+            it('when the error response has no content type or body, the error from the request state is a normal error', async () => {
                 fetchMock.mockResponse(() =>
                     Promise.resolve({
                         body: '',
@@ -75,7 +87,7 @@ describe('useFetch error handling', () => {
                     useFetch('http://localhost')
                 )
                 expect(result.current.status).toBe('pending')
-                act(() => waitForNextUpdate())
+                await act(() => waitForNextUpdate())
                 expect(result.current.status).toBe('error')
                 expect(result.current.error).toBeInstanceOf(Error)
                 expect(typeof result.current.error?.message).toBe('string')
