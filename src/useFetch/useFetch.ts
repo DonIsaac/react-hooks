@@ -1,12 +1,11 @@
 import {
-    useState,
     useEffect,
     useDebugValue,
     useTransition,
     useCallback,
     useReducer,
 } from 'react'
-import { RequestState, RequestStatus } from './types'
+import { RequestState } from './types'
 import { parseBody } from './parseBody'
 import useMemoCompare from '../useMemoCompare'
 import { useRequestState } from './useFetch.reducer'

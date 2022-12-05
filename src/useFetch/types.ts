@@ -3,7 +3,8 @@
  */
 export type RequestStatus = 'pending' | 'success' | 'error'
 
-export type RequestState<T, E = Error> = RequestCallbacks & RequestStateData<T, E>
+export type RequestState<T, E = Error> = RequestCallbacks &
+    RequestStateData<T, E>
 
 export type RequestCallbacks = {
     /**
