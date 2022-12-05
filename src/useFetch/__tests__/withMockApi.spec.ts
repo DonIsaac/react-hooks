@@ -4,7 +4,7 @@ import {
     RenderHookResult,
     WaitForNextUpdateOptions,
 } from '@testing-library/react-hooks'
-import { RequestState } from '../../types'
+import { RequestState } from '../types'
 import useFetch from '../useFetch'
 import { server } from './mockServer'
 

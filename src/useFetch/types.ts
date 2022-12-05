@@ -3,10 +3,9 @@
  */
 export type RequestStatus = 'pending' | 'success' | 'error'
 
-export type RequestState<T, E = Error> = RequestActions &
-    (RequestStatePending | RequestStateSuccess<T> | RequestStateError<E>)
+export type RequestState<T, E = Error> = RequestCallbacks & RequestStateData<T, E>
 
-type RequestActions = {
+export type RequestCallbacks = {
     /**
      * Manually re-execute the request.
      *
@@ -16,7 +15,12 @@ type RequestActions = {
     refetch: () => void
 }
 
-type RequestStatePending = {
+export type RequestStateData<T, E> =
+    | RequestStatePending
+    | RequestStateSuccess<T>
+    | RequestStateError<E>
+
+export type RequestStatePending = {
     /**
      * The current status of the fetch request.
      */
@@ -38,7 +42,7 @@ type RequestStatePending = {
 /**
  * @template E The type of error received from the response payload.
  */
-type RequestStateError<E> = {
+export type RequestStateError<E> = {
     /**
      * The current status of the fetch request.
      */
@@ -60,7 +64,7 @@ type RequestStateError<E> = {
 /**
  * @template T The type of data received from the response payload.
  */
-type RequestStateSuccess<T> = {
+export type RequestStateSuccess<T> = {
     /**
      * The current status of the fetch request.
      */

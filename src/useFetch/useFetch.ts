@@ -9,6 +9,7 @@ import {
 import { RequestState, RequestStatus } from './types'
 import { parseBody } from './parseBody'
 import useMemoCompare from '../useMemoCompare'
+import { useRequestState } from './useFetch.reducer'
 
 /**
  * Sends a {@link fetch} request to a URL.
@@ -43,14 +44,18 @@ export default function useFetch<T = any, E = Error>(
     to: RequestInfo,
     opts?: RequestInit
 ): RequestState<T, E> {
-    const [data, setData] = useState<T | null>(null)
-    const [error, setError] = useState<E | null>(null)
-    const [status, setStatus] = useState<RequestStatus>('pending')
+    // const [data, setData] = useState<T | null>(null)
+    // const [error, setError] = useState<E | null>(null)
+    // const [status, setStatus] = useState<RequestStatus>('pending')
     // const [shouldRefetch, setShouldRefetch] = useState(true)
     const [manualRefetch, forceRefetch] = useReducer(s => (s + 1) % 10, 0)
     const [isRefetchPending, startRefetch] = useTransition()
+    const {
+        state,
+        actions: { reset, receiveResponse, receiveError },
+    } = useRequestState<T, E>()
 
-    useDebugValue(status)
+    useDebugValue(state.status)
 
     const memoTo = useMemoCompare(to)
     const memoOpts = useMemoCompare(opts)
@@ -84,32 +89,36 @@ export default function useFetch<T = any, E = Error>(
                 } else {
                     // Request succeeds, parse the response and set the data object
                     const payload = (await parseBody(res)) as T
-                    setData(payload)
-                    setStatus('success')
+                    receiveResponse(payload)
+                    // setData(payload)
+                    // setStatus('success')
                 }
             } catch (err) {
-                setError(err as E)
-                setStatus('error')
+                // setError(err as E)
+                receiveError(err as E)
+                // setStatus('error')
             }
         }
 
         sendRequest()
         // TODO add opts back.
-    }, [memoTo, memoOpts, manualRefetch])
+    }, [memoTo, memoOpts, manualRefetch, receiveResponse, receiveError])
 
-    const refetch = useCallback(function refetch() {
-        startRefetch(() => {
-            setData(null)
-            setError(null)
-            setStatus('pending')
-            forceRefetch()
-        })
-    }, [])
+    const refetch = useCallback(
+        function refetch() {
+            startRefetch(() => {
+                reset()
+                // setData(null)
+                // setError(null)
+                // setStatus('pending')
+                forceRefetch()
+            })
+        },
+        [reset]
+    )
 
     return {
-        status: isRefetchPending ? 'pending' : status,
-        data,
-        error,
+        ...state,
         refetch,
     } as RequestState<T, E>
 }
