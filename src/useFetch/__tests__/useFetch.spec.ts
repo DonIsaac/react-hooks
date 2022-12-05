@@ -8,7 +8,7 @@ import {
 import { SynchronousPromise } from 'synchronous-promise'
 import { MockResponseInit } from 'jest-fetch-mock'
 import useFetch from '../useFetch'
-import { RequestState } from '../../types'
+import { RequestState } from '../types'
 
 const waitOptions: WaitForNextUpdateOptions = {
     timeout: 1000,

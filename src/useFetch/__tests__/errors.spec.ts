@@ -1,7 +1,7 @@
 import { renderHook, RenderHookResult, act } from '@testing-library/react-hooks'
 import { MockResponseInit } from 'jest-fetch-mock'
 import useFetch from '../useFetch'
-import { RequestState } from '../../types'
+import { RequestState } from '../types'
 
 describe('useFetch error handling', () => {
     beforeAll(() => {

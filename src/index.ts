@@ -6,7 +6,7 @@ import {
     DelayStrategy,
 } from './useDelayedCallback'
 import { default as useDidMount } from './useDidMount'
-import { default as useFetch } from './useFetch'
+import { default as useFetch, RequestState, RequestStatus } from './useFetch'
 import { default as useForceUpdate } from './useForceUpdate'
 import { default as useInterval } from './useInterval'
 import { default as useLocalStorage } from './useLocalStorage'
@@ -18,7 +18,6 @@ import {
     UsePaginatedOptions,
     PaginatedRequest,
 } from './usePaginated'
-import { RequestState, RequestStatus } from './types'
 
 // Hooks
 export {
