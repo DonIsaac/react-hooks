@@ -43,12 +43,8 @@ export default function useFetch<T = any, E = Error>(
     to: RequestInfo,
     opts?: RequestInit
 ): RequestState<T, E> {
-    // const [data, setData] = useState<T | null>(null)
-    // const [error, setError] = useState<E | null>(null)
-    // const [status, setStatus] = useState<RequestStatus>('pending')
-    // const [shouldRefetch, setShouldRefetch] = useState(true)
     const [manualRefetch, forceRefetch] = useReducer(s => (s + 1) % 10, 0)
-    const [isRefetchPending, startRefetch] = useTransition()
+    const [, startRefetch] = useTransition()
     const {
         state,
         actions: { reset, receiveResponse, receiveError },
@@ -89,13 +85,9 @@ export default function useFetch<T = any, E = Error>(
                     // Request succeeds, parse the response and set the data object
                     const payload = (await parseBody(res)) as T
                     receiveResponse(payload)
-                    // setData(payload)
-                    // setStatus('success')
                 }
             } catch (err) {
-                // setError(err as E)
                 receiveError(err as E)
-                // setStatus('error')
             }
         }
 
@@ -107,9 +99,6 @@ export default function useFetch<T = any, E = Error>(
         function refetch() {
             startRefetch(() => {
                 reset()
-                // setData(null)
-                // setError(null)
-                // setStatus('pending')
                 forceRefetch()
             })
         },
