@@ -18,7 +18,7 @@ describe('usePaginated(to, options)', () => {
         })
 
         it('sends a request using query parameters', async () => {
-            expect(fetchMock).toBeCalledWith(`${url}/?page=0`, undefined)
+            expect(fetchMock).toHaveBeenCalledWith(`${url}/?page=0`, undefined)
         })
 
         it('should fetch the next/prev page when nextPage() then prevPage() are called', async () => {
@@ -26,13 +26,13 @@ describe('usePaginated(to, options)', () => {
                 result.result.current.nextPage()
             })
             await result.waitForNextUpdate()
-            expect(fetchMock).toBeCalledWith(`${url}/?page=1`, undefined)
+            expect(fetchMock).toHaveBeenCalledWith(`${url}/?page=1`, undefined)
 
             act(() => {
                 result.result.current.prevPage()
             })
             await result.waitForNextUpdate()
-            expect(fetchMock).toBeCalledWith(`${url}/?page=0`, undefined)
+            expect(fetchMock).toHaveBeenCalledWith(`${url}/?page=0`, undefined)
         })
 
         it('prevPage() should not decrement the page number past `pageStart`', async () => {
@@ -40,7 +40,7 @@ describe('usePaginated(to, options)', () => {
                 result.result.current.prevPage()
             })
             // await result.waitForNextUpdate({ timeout: 100 })
-            expect(fetchMock).toBeCalledWith(`${url}/?page=0`, undefined)
+            expect(fetchMock).toHaveBeenCalledWith(`${url}/?page=0`, undefined)
         })
     })
 
@@ -57,11 +57,11 @@ describe('usePaginated(to, options)', () => {
         })
 
         it('the to function should be called with the page number and no limit', () => {
-            expect(to).toBeCalledWith(0, undefined)
+            expect(to).toHaveBeenCalledWith(0, undefined)
         })
 
         it('should fetch the returned url', () => {
-            expect(fetchMock).toBeCalledWith(
+            expect(fetchMock).toHaveBeenCalledWith(
                 'https://foo.com/bar/?p=0&l=undefined',
                 undefined
             )
