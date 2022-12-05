@@ -146,7 +146,7 @@ describe('useDelayedCallback', () => {
                 })
                 result.cancel()
                 testCase.run()
-                expect(cbThrows).not.toBeCalled()
+                expect(cbThrows).not.toHaveBeenCalled()
             })
         })
 
@@ -256,7 +256,7 @@ describe('useDelayedCallback', () => {
                 res.cancel()
                 testCase.run()
 
-                expect(cbAsyncThrows).not.toBeCalled()
+                expect(cbAsyncThrows).not.toHaveBeenCalled()
             })
         })
     })
