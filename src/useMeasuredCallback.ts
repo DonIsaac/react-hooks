@@ -48,6 +48,7 @@ import { useCallback, DependencyList } from 'react'
  *
  * @returns       A memoized, measured version of `callback`.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function useMeasuredCallback<T extends (...args: any[]) => any>(
     callback: T,
     deps: DependencyList,
