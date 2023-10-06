@@ -16,6 +16,9 @@ export type UseLocalStorage = {
      * given key, that value will be used as the initial state. Otherwise, the
      * state will be undefined.
      *
+     * It is safe to use this hook with server-side rendering; the initial state
+     * (if provided) will be used.
+     *
      * @param key - The key to store values under in local storage.
      * @returns A tuple containing a stateful value and a setter function, identical
      * to the return value of {@link useState}.
@@ -39,6 +42,9 @@ export type UseLocalStorage = {
      * If provided, the initial state parameter will be used as the state's
      * starting value. Otherwise existing data persisted in local storage will
      * be used. If neither are available, the state will be `undefined`.
+     *
+     * It is safe to use this hook with server-side rendering; the initial state
+     * (if provided) will be used.
      *
      * @param key - The key to store values under in local storage.
      * @param initialState - Either a value or a factory function to use as the
@@ -132,6 +138,10 @@ const useLocalStorage: UseLocalStorage = canUseDOM()
  * If provided, the initial state parameter will be used as the state's
  * starting value. Otherwise existing data persisted in local storage will
  * be used. If neither are available, the state will be `undefined`.
+ *
+ * It is safe to use this hook with server-side rendering. Local storage
+ * operations will be skipped on the server, and the initial state (if provided)
+ * will be used.
  *
  * @param key - The key to store values under in local storage.
  * @param initialState - Either a value or a factory function to use as the

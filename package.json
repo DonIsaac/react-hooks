@@ -7,8 +7,6 @@
     "react",
     "hooks"
   ],
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "license": "MIT",
   "packageManager": "yarn@3.2.0",
   "repository": {
@@ -23,6 +21,15 @@
     "name": "Donald Isaac",
     "url": "https://donisaac.dev"
   },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "default": {
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "sideEffects": false,
   "scripts": {
     "test": "jest",
     "build": "tsc",
