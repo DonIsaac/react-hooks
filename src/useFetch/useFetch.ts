@@ -39,6 +39,7 @@ import { useRequestState } from './useFetch.reducer'
  * @see
  * {@link https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API MDN Fetch API}
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function useFetch<T = any, E = Error>(
     to: RequestInfo,
     opts?: RequestInit

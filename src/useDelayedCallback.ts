@@ -28,17 +28,17 @@ type Handle = number
  */
 type DelayStrategyArray<
     T extends (callback: () => void, ...args: any[]) => Handle,
-    O = void
+    O = void,
 > = T extends (callback: () => void, opts?: infer P) => Handle
     ? [
           requestDelayedCallback: T,
           cancelDelayedCallback: (handle: Handle) => void,
-          opts?: O extends void ? P : O
+          opts?: O extends void ? P : O,
       ]
     : [
           requestDelayedCallback: T,
           cancelDelayedCallback: (handle: Handle) => void,
-          opts: undefined
+          opts: undefined,
       ]
 
 type DelayStrategies = {

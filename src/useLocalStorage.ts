@@ -52,10 +52,10 @@ export type UseLocalStorage = {
      * @see {@link localStorage}
      * @see {@link useState}
      */
-    <T>(key: string, initialState: T | (() => T)): [
-        T,
-        Dispatch<SetStateAction<T>>
-    ]
+    <T>(
+        key: string,
+        initialState: T | (() => T)
+    ): [T, Dispatch<SetStateAction<T>>]
 }
 
 /**
